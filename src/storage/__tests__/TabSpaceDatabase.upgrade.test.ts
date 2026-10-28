@@ -173,19 +173,25 @@ describe(`schema v${TABSPACE_DB_VERSION}`, () => {
     await database.delete();
   });
 
-  test('upgraded journal schema intentionally blocks older builds', async () => {
+  test('downgrading may discard the cloud journal', async () => {
     await createV7Database();
     const current = new TabSpaceDatabase(TAG);
     await current.open();
     await current.close();
 
-    // v12 adds a journal for reliable cloud deletions; older v7 builds
-    // cannot reopen it without restoring a backup (IndexedDB VersionError).
+    // Dexie can reopen a newer database using an older schema, but doing so
+    // drops the v12-only deletion journal. This makes downgrade unsafe
+    // while sync is enabled, even though ordinary saved records survive.
     const older = new Dexie(DB_NAME);
     older.version(7).stores(V7_SCHEMAS);
-    await expect(older.open()).rejects.toMatchObject({
-      name: 'VersionError',
-    });
+    await older.open();
+    expect(older.tables.map((table) => table.name)).toContain('ChromeSession');
+    expect(older.tables.map((table) => table.name)).not.toContain(
+      'SavedCloudJournal',
+    );
+    await expect(
+      older.table('SavedNote').get('row-SavedNote'),
+    ).resolves.toBeTruthy();
 
     await older.delete();
   });

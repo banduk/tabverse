@@ -71,6 +71,7 @@ https://docs.github.com/en/rest/repos/contents
 ## Browser downgrade
 
 This feature raises the IndexedDB schema from v11 to v12 for durable
-cross-device deletion tombstones. Downgrading to a v11 Tabverse build after
-opening v12 can result in IndexedDB VersionError. Export a local backup
-before installing the cloud-enabled build.
+cross-device deletion tombstones. Downgrading to a v11 Tabverse build can succeed, but Dexie may silently
+drop the v12-only deletion journal. This can cause deleted records to be
+restored by a later sync. Export a local backup before installing the
+cloud-enabled build, and do not downgrade while cloud sync is active.

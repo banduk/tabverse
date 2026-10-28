@@ -31,8 +31,12 @@ function extensionManifest(): Plugin {
       manifest.version = pkg.version;
       const googleClientId = process.env.TABVERSE_GOOGLE_CLIENT_ID;
       if (googleClientId) {
-        if (!/^\d+-[a-z0-9]+\.apps\.googleusercontent\.com$/.test(googleClientId)) {
-          this.error('TABVERSE_GOOGLE_CLIENT_ID must be a Chrome OAuth client ID');
+        if (
+          !/^\d+-[a-z0-9]+\.apps\.googleusercontent\.com$/.test(googleClientId)
+        ) {
+          this.error(
+            'TABVERSE_GOOGLE_CLIENT_ID must be a Chrome OAuth client ID',
+          );
         }
         manifest.oauth2 = {
           client_id: googleClientId,

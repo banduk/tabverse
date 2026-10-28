@@ -33,7 +33,10 @@ export class GoogleDriveFiles implements CloudFiles {
     private readonly fetcher: typeof fetch = fetch,
   ) {}
 
-  private async request(path: string, init: RequestInit = {}): Promise<Response> {
+  private async request(
+    path: string,
+    init: RequestInit = {},
+  ): Promise<Response> {
     const response = await this.fetcher(DRIVE_ORIGIN + path, {
       ...init,
       headers: {
@@ -61,14 +64,9 @@ export class GoogleDriveFiles implements CloudFiles {
       const result = await parseResponse<{
         nextPageToken?: string;
         files?: { id: string; name: string }[];
-      }>(
-        await this.request('/drive/v3/files?' + query.toString()),
-      );
+      }>(await this.request('/drive/v3/files?' + query.toString()));
       for (const item of result.files ?? []) {
-        if (
-          item.name.startsWith(FILE_PREFIX) &&
-          item.name.endsWith('.json')
-        ) {
+        if (item.name.startsWith(FILE_PREFIX) && item.name.endsWith('.json')) {
           files.push(item);
         }
       }
@@ -82,7 +80,9 @@ export class GoogleDriveFiles implements CloudFiles {
       '/drive/v3/files/' + encodeURIComponent(file.id) + '?alt=media',
     );
     if (!response.ok) {
-      throw new Error('Cannot read Google Drive snapshot: HTTP ' + response.status);
+      throw new Error(
+        'Cannot read Google Drive snapshot: HTTP ' + response.status,
+      );
     }
     return response.text();
   }
@@ -135,7 +135,9 @@ export class GoogleDriveFiles implements CloudFiles {
       );
     }
     if (!response.ok) {
-      throw new Error('Cannot write Google Drive snapshot: HTTP ' + response.status);
+      throw new Error(
+        'Cannot write Google Drive snapshot: HTTP ' + response.status,
+      );
     }
   }
 }
@@ -157,7 +159,10 @@ export class GitHubFiles implements CloudFiles {
     repo: string,
     private readonly fetcher: typeof fetch = fetch,
   ) {
-    if (!/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/.test(repo) || repo.includes('..')) {
+    if (
+      !/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/.test(repo) ||
+      repo.includes('..')
+    ) {
       throw new Error('Invalid GitHub repository name.');
     }
     [this.owner, this.repo] = repo.split('/');
@@ -174,7 +179,10 @@ export class GitHubFiles implements CloudFiles {
     );
   }
 
-  private async request(path: string, init: RequestInit = {}): Promise<Response> {
+  private async request(
+    path: string,
+    init: RequestInit = {},
+  ): Promise<Response> {
     return this.fetcher(this.url(path), {
       ...init,
       headers: {
@@ -197,9 +205,7 @@ export class GitHubFiles implements CloudFiles {
 
   async list(): Promise<RemoteFile[]> {
     await this.assertPrivateRepo();
-    const response = await this.request(
-      '/contents/' + this.folder,
-    );
+    const response = await this.request('/contents/' + this.folder);
     if (response.status === 404) return [];
     const entries = await parseResponse<GitHubContent[]>(response);
     if (!Array.isArray(entries)) {

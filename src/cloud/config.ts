@@ -70,9 +70,7 @@ export async function saveCloudConfig(
 export async function loadCloudSession(): Promise<CloudSession | null> {
   const obj = await chrome.storage.session.get(CLOUD_SESSION_KEY);
   const secret = obj[CLOUD_SESSION_KEY] as CloudSession | undefined;
-  return secret && typeof secret.passphrase === 'string'
-    ? secret
-    : null;
+  return secret && typeof secret.passphrase === 'string' ? secret : null;
 }
 
 export async function unlockCloudSession(secret: CloudSession): Promise<void> {

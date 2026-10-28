@@ -37,10 +37,7 @@ export function mergeRecords(records: CloudRecord[]): CloudRecord[] {
   );
 }
 
-export function fromLocal(
-  record: RecordInput,
-  deviceId: string,
-): CloudRecord {
+export function fromLocal(record: RecordInput, deviceId: string): CloudRecord {
   return {
     ...record,
     deleted: !!record.deleted,

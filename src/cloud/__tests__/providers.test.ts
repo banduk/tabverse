@@ -26,8 +26,9 @@ test('Drive only accesses appDataFolder and writes JSON with bearer auth', async
 });
 
 test('GitHub refuses any public repository', async () => {
-  const mock = vi.fn(async () =>
-    new Response(JSON.stringify({ private: false }), { status: 200 }),
+  const mock = vi.fn(
+    async () =>
+      new Response(JSON.stringify({ private: false }), { status: 200 }),
   );
   const github = new GitHubFiles('token', 'owner/repo', mock as typeof fetch);
   await expect(github.list()).rejects.toThrow('PRIVATE');

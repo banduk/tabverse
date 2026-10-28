@@ -74,7 +74,8 @@ export function CloudSyncPanel() {
       });
       if (!auth.token) throw new Error('Google authorization failed.');
     } else {
-      if (!token.trim()) throw new Error('Enter your fine-grained GitHub token.');
+      if (!token.trim())
+        throw new Error('Enter your fine-grained GitHub token.');
       await new GitHubFiles(token.trim(), repo.trim()).assertPrivateRepo();
     }
     return {
@@ -144,7 +145,9 @@ export function CloudSyncPanel() {
       setStatus(null);
       setToken('');
       setPassphrase('');
-      setMessage('Disconnected. Local and remote encrypted copies were retained.');
+      setMessage(
+        'Disconnected. Local and remote encrypted copies were retained.',
+      );
     } finally {
       setBusy(false);
     }
@@ -154,22 +157,20 @@ export function CloudSyncPanel() {
     <section aria-label="Private cloud synchronization">
       <h3>Personal encrypted synchronization</h3>
       <p>
-        Records are encrypted locally before transfer. Only Google Drive
-        or a private GitHub repository can receive them.
+        Records are encrypted locally before transfer. Only Google Drive or a
+        private GitHub repository can receive them.
       </p>
       <p>
         Active provider:{' '}
-        <strong>{configured ? configured.provider : 'none'}</strong>
-        . Sync automatically checks for changes every five minutes while unlocked.
+        <strong>{configured ? configured.provider : 'none'}</strong>. Sync
+        automatically checks for changes every five minutes while unlocked.
       </p>
       <label htmlFor="cloud-provider">Provider</label>
       <select
         id="cloud-provider"
         value={provider}
         disabled={busy}
-        onChange={(event) =>
-          setProvider(event.target.value as CloudProvider)
-        }
+        onChange={(event) => setProvider(event.target.value as CloudProvider)}
       >
         <option value="drive">My Google Drive</option>
         <option value="github">My private GitHub repository</option>
@@ -178,8 +179,8 @@ export function CloudSyncPanel() {
         <p>
           {googleReady
             ? 'Google OAuth is configured in this extension build.'
-            : 'Google OAuth client ID is not configured. See CLOUD_SYNC.md.'}
-          {' '}Files go to the hidden appDataFolder.
+            : 'Google OAuth client ID is not configured. See CLOUD_SYNC.md.'}{' '}
+          Files go to the hidden appDataFolder.
         </p>
       ) : (
         <>
@@ -191,7 +192,9 @@ export function CloudSyncPanel() {
             disabled={busy}
             onChange={(event) => setRepo(event.target.value)}
           />
-          <label htmlFor="cloud-token">Fine-grained token (Contents: read/write)</label>
+          <label htmlFor="cloud-token">
+            Fine-grained token (Contents: read/write)
+          </label>
           <InputGroup
             id="cloud-token"
             type="password"
@@ -213,23 +216,21 @@ export function CloudSyncPanel() {
         onChange={(event) => setPassphrase(event.target.value)}
       />
       <p>
-        The passphrase and GitHub token are kept only in Chrome session
-        storage, and must be provided again after a browser restart.
-        Do not lose your passphrase: there is no recovery mechanism.
+        The passphrase and GitHub token are kept only in Chrome session storage,
+        and must be provided again after a browser restart. Do not lose your
+        passphrase: there is no recovery mechanism.
       </p>
       <Button
         intent="primary"
         loading={busy}
         onClick={() => void connect()}
         text={configured ? 'Change provider / unlock' : 'Connect and sync'}
-      />
-      {' '}
+      />{' '}
       <Button
         disabled={!configured || busy}
         onClick={() => void syncAgain()}
         text="Sync now"
-      />
-      {' '}
+      />{' '}
       <Button
         disabled={!configured || busy}
         onClick={() => void disconnect()}

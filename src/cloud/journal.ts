@@ -23,9 +23,7 @@ export async function recordCloudChange(record: RecordInput): Promise<void> {
 export async function localTombstones(
   deviceId: string,
 ): Promise<CloudRecord[]> {
-  const rows = await db
-    .table<CloudJournalRow>(CLOUD_JOURNAL_TABLE)
-    .toArray();
+  const rows = await db.table<CloudJournalRow>(CLOUD_JOURNAL_TABLE).toArray();
   return rows.filter((r) => r.deleted).map((r) => fromLocal(r, deviceId));
 }
 

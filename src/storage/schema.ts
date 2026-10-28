@@ -24,10 +24,7 @@ import {
   CLOSED_TAB_DB_TABLE_NAME,
 } from '../data/closedTab/ClosedTab';
 
-import {
-  CLOUD_JOURNAL_SCHEMA,
-  CLOUD_JOURNAL_TABLE,
-} from '../cloud/constants';
+import { CLOUD_JOURNAL_SCHEMA, CLOUD_JOURNAL_TABLE } from '../cloud/constants';
 
 export const schemas = {};
 

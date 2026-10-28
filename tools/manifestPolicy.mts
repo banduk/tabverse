@@ -32,7 +32,9 @@ export const DEFAULT_CONNECT_SRC =
 export function connectSrcFor(allowedServers: string | undefined): string {
   // Offline-only build: a future backup provider needs a separately reviewed allowlist.
   if ((allowedServers ?? '').trim()) {
-    throw new Error('Only personal Google Drive and GitHub APIs are authorized');
+    throw new Error(
+      'Only personal Google Drive and GitHub APIs are authorized',
+    );
   }
   return DEFAULT_CONNECT_SRC;
 }

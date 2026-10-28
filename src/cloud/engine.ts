@@ -74,7 +74,9 @@ async function doSync(
 
   for (const file of remoteFiles) {
     if (!file.name.startsWith('tabverse-private-v1-')) continue;
-    const encrypted = JSON.parse(await provider.read(file)) as EncryptedDocument;
+    const encrypted = JSON.parse(
+      await provider.read(file),
+    ) as EncryptedDocument;
     const text = await unseal(encrypted, session.passphrase);
     const snapshot = readSnapshot(JSON.parse(text));
     if (file.name !== fileName(snapshot.deviceId)) {

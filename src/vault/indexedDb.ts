@@ -31,6 +31,31 @@ export function allowLegacyVaultRecords(value: boolean): void {
 
 export const ENCRYPTED_TABLES = Object.keys(PUBLIC);
 
+/**
+ * IndexedDB keys used by Tabverse are numbers and strings; handle date and
+ * compound keys too. Dexie 4 does not expose a typed cmp on DBCore.
+ */
+function compareIndexedKeys(a: unknown, b: unknown): number {
+  if (a === b) return 0;
+  if (typeof a === 'string' && typeof b === 'string') {
+    return a < b ? -1 : 1;
+  }
+  if (typeof a === 'number' && typeof b === 'number') {
+    return a < b ? -1 : 1;
+  }
+  if (a instanceof Date && b instanceof Date) {
+    return compareIndexedKeys(a.getTime(), b.getTime());
+  }
+  if (Array.isArray(a) && Array.isArray(b)) {
+    for (let i = 0; i < Math.min(a.length, b.length); i++) {
+      const result = compareIndexedKeys(a[i], b[i]);
+      if (result !== 0) return result;
+    }
+    return compareIndexedKeys(a.length, b.length);
+  }
+  throw new Error('Unsupported IndexedDB cursor key type.');
+}
+
 /** Keep the public AAD fields in a canonical order. */
 function publicFields(table: string, row: Record<string, any>) {
   const out: Record<string, unknown> = {};
@@ -202,8 +227,8 @@ export function applyVaultMiddleware(db: Dexie): void {
                 while (
                   position < rows.length &&
                   (request.reverse
-                    ? Dexie.cmp(rows[position].key, key) > 0
-                    : Dexie.cmp(rows[position].key, key) < 0)
+                    ? compareIndexedKeys(rows[position].key, key) > 0
+                    : compareIndexedKeys(rows[position].key, key) < 0)
                 ) {
                   position += 1;
                 }
@@ -214,12 +239,12 @@ export function applyVaultMiddleware(db: Dexie): void {
                 while (
                   position < rows.length &&
                   ((request.reverse
-                    ? Dexie.cmp(rows[position].key, key) > 0
-                    : Dexie.cmp(rows[position].key, key) < 0) ||
-                    (Dexie.cmp(rows[position].key, key) === 0 &&
+                    ? compareIndexedKeys(rows[position].key, key) > 0
+                    : compareIndexedKeys(rows[position].key, key) < 0) ||
+                    (compareIndexedKeys(rows[position].key, key) === 0 &&
                       (request.reverse
-                        ? Dexie.cmp(rows[position].primaryKey, primaryKey) > 0
-                        : Dexie.cmp(rows[position].primaryKey, primaryKey) < 0)))
+                        ? compareIndexedKeys(rows[position].primaryKey, primaryKey) > 0
+                        : compareIndexedKeys(rows[position].primaryKey, primaryKey) < 0)))
                 ) {
                   position += 1;
                 }

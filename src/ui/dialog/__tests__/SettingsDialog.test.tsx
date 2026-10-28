@@ -42,7 +42,7 @@ describe('SettingsBody', () => {
     const markup = body('sync');
     // the sync panel's loading row (it reads its state in an effect, which a
     // static render does not run)
-    expect(markup).toContain('external synchronization is disabled');
+    expect(markup).toContain('Personal encrypted synchronization');
     expect(markup).not.toContain('Created in Sydney');
   });
 

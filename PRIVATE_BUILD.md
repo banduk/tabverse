@@ -1,11 +1,11 @@
 # Tabverse Private — offline-only Chrome extension
 
-This fork disables the known third-party network paths in the browser extension.
+This fork removes the original server sync and limits cloud traffic to explicitly authorized Google Drive and GitHub APIs.
 
 ## Differences from upstream
 
-- No official or custom server sync, pairing window, or cloud console in the installed extension.
-- Chrome's content security policy blocks remote requests, WebSockets, iframes and images.
+- No official or custom Tabverse server, pairing window, or cloud console. Optional encrypted cloud sync is implemented separately.
+- Chrome's CSP allows only `www.googleapis.com` and `api.github.com` for opt-in cloud requests; other remote connections, iframes and images stay blocked.
 - No persistent `<all_urls>` access. Page-to-Markdown/AI actions request permission for the chosen web origin when the user clicks.
 - Built-in local notes, bookmarks, task lists, tab groups, history and on-device AI are retained.
 - External favicons and placeholders are replaced with an inline icon to prevent background requests to their sites.

@@ -9,9 +9,11 @@ import {
 const manifest = JSON.parse(readFileSync('src/manifest.json', 'utf8'));
 
 test('offline build allows no arbitrary network destinations', () => {
-  expect(DEFAULT_CONNECT_SRC).toBe("'self'");
-  expect(connectSrcFor(undefined)).toBe("'self'");
-  expect(connectSrcFor('')).toBe("'self'");
+  expect(DEFAULT_CONNECT_SRC).toBe(
+    "'self' https://www.googleapis.com https://api.github.com",
+  );
+  expect(connectSrcFor(undefined)).toBe(DEFAULT_CONNECT_SRC);
+  expect(connectSrcFor('')).toBe(DEFAULT_CONNECT_SRC);
   expect(() => connectSrcFor('https://example.com')).toThrow();
   expect(
     withConnectSrc("default-src 'self'; connect-src https:", "'self'"),
@@ -24,6 +26,7 @@ test('no persistent host access or external pairing channel', () => {
     'https://*/*',
   ]);
   expect(manifest.externally_connectable).toBeUndefined();
+  expect(manifest.permissions).toContain('identity');
   expect(manifest.content_security_policy.extension_pages).toContain(
     "frame-src 'none'",
   );

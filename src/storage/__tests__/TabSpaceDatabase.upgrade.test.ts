@@ -24,7 +24,9 @@ const DB_NAME = `TabSpaceDB-${TAG}`;
 
 // what v7 declared: the current stores plus the session snapshots
 const V7_SCHEMAS: { [name: string]: string } = {
-  ...schemas,
+  ...Object.fromEntries(
+    Object.entries(schemas).filter(([name]) => name !== 'SavedCloudJournal'),
+  ),
   ChromeSession: 'id, tag, createdAt, updatedAt',
 };
 
@@ -65,7 +67,9 @@ function createV7Database(): Promise<void> {
  * to record which browser run wrote a row (data/tabSpace/previewSession).
  */
 const V10_SCHEMAS: { [name: string]: string } = {
-  ...schemas,
+  ...Object.fromEntries(
+    Object.entries(schemas).filter(([name]) => name !== 'SavedCloudJournal'),
+  ),
   SavedTabPreview: 'id, capturedAt',
 };
 
@@ -125,11 +129,14 @@ describe(`schema v${TABSPACE_DB_VERSION}`, () => {
     );
 
     // the other stores are still readable and their rows survived
-    for (const name of Object.keys(schemas)) {
+    for (const name of Object.keys(V7_SCHEMAS).filter(
+      (key) => key !== 'ChromeSession',
+    )) {
       const row = await database.table(name).get(`row-${name}`);
       expect(row, `row in ${name}`).toBeTruthy();
     }
 
+    expect(await database.table('SavedCloudJournal').count()).toBe(0);
     await database.delete();
   });
 
@@ -166,24 +173,22 @@ describe(`schema v${TABSPACE_DB_VERSION}`, () => {
     await database.delete();
   });
 
-  test('an older build can still open the database', async () => {
+  test('downgrading may discard the cloud journal', async () => {
     await createV7Database();
     const current = new TabSpaceDatabase(TAG);
     await current.open();
     await current.close();
 
-    // Worth knowing: dropping the store does NOT lock out older builds. Dexie
-    // compares the declared v7 schema with the installed one, sees the missing
-    // store, re-creates it and bumps the native version ("SchemaDiff: Schema
-    // was extended..."). A rolled back build therefore keeps working and goes
-    // back to recording session snapshots - which the server still accepts and
-    // prunes, so nothing breaks in either direction.
+    // Dexie can reopen a newer database using an older schema, but doing so
+    // drops the v12-only deletion journal. This makes downgrade unsafe
+    // while sync is enabled, even though ordinary saved records survive.
     const older = new Dexie(DB_NAME);
     older.version(7).stores(V7_SCHEMAS);
     await older.open();
-
-    expect(older.tables.map((t) => t.name)).toContain('ChromeSession');
-    // and the other stores are still there
+    expect(older.tables.map((table) => table.name)).toContain('ChromeSession');
+    expect(older.tables.map((table) => table.name)).not.toContain(
+      'SavedCloudJournal',
+    );
     await expect(
       older.table('SavedNote').get('row-SavedNote'),
     ).resolves.toBeTruthy();

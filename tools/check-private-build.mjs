@@ -13,10 +13,20 @@ const csp = manifest.content_security_policy.extension_pages;
 assert.deepEqual(manifest.host_permissions ?? [], []);
 assert.equal(manifest.externally_connectable, undefined);
 assert.equal(manifest.optional_host_permissions?.length, 2);
-assert.match(csp, /connect-src 'self'/);
+assert.match(
+  csp,
+  /connect-src 'self' https:\/\/www\.googleapis\.com https:\/\/api\.github\.com/,
+);
 assert.match(csp, /img-src 'self' data: blob:/);
 assert.match(csp, /frame-src 'none'/);
-assert.ok(!/(?:https?:|wss?:)(?:\s|;)/.test(csp), 'CSP allows a remote scheme');
+assert.ok(
+  !/(?:https?:|wss?:)(?:\s|;)/.test(csp),
+  'CSP allows broad remote schemes',
+);
+assert.ok(
+  !csp.includes('https: ') && !csp.includes('wss:'),
+  'CSP wildcard origin detected',
+);
 
 function walk(folder) {
   return readdirSync(folder, { withFileTypes: true }).flatMap((entry) => {

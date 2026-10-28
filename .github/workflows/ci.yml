@@ -40,6 +40,9 @@ jobs:
         run: pnpm test
 
       - name: production build
+        env:
+          TABVERSE_GOOGLE_CLIENT_ID: ${{ vars.TABVERSE_GOOGLE_CLIENT_ID }}
+          TABVERSE_EXTENSION_PUBLIC_KEY: ${{ vars.TABVERSE_EXTENSION_PUBLIC_KEY }}
         run: pnpm run build
 
       - name: assert private network policy
@@ -73,6 +76,9 @@ jobs:
         # produces dist_store/tabverse.zip; the web store takes the zip, and a
         # hand install extracts it and uses "Load unpacked". No .crx: modern
         # Chrome blocks installing an off-store .crx.
+        env:
+          TABVERSE_GOOGLE_CLIENT_ID: ${{ vars.TABVERSE_GOOGLE_CLIENT_ID }}
+          TABVERSE_EXTENSION_PUBLIC_KEY: ${{ vars.TABVERSE_EXTENSION_PUBLIC_KEY }}
         run: pnpm run build-store
 
       - name: archive store package

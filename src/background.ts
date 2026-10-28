@@ -1,6 +1,8 @@
 import { dbAuditor as bookmarkDbAuditor } from './data/bookmark/dbAuditor';
 import { dbAuditor as closedTabDbAuditor } from './data/closedTab/dbAuditor';
 import { logger } from './global';
+import { startChangeFeed } from './data/repo/changeFeed';
+import { syncPrivateCloud } from './cloud/engine';
 import { dbAuditor as noteDbAuditor } from './data/note/dbAuditor';
 import { dbAuditor as tabSpaceDbAuditor } from './data/tabSpace/dbAuditor';
 import { dbAuditor as todoDbAuditor } from './data/todo/dbAuditor';
@@ -56,7 +58,36 @@ chrome.idle.onStateChanged.addListener(
   },
 );
 
-// Offline-only build: never initialize sync or accept external pairing credentials.
+// Cloud sync is opt-in, encrypted and limited to the selected personal account.
+void startChangeFeed();
+const CLOUD_SYNC_ALARM = 'tabverse_personal_cloud_sync';
+void chrome.alarms
+  .get(CLOUD_SYNC_ALARM)
+  .then(async (existing) => {
+    if (!existing) {
+      await chrome.alarms.create(CLOUD_SYNC_ALARM, {
+        periodInMinutes: 5,
+      });
+    }
+  })
+  .catch((err) => logger.error('Could not schedule private cloud sync', err));
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === CLOUD_SYNC_ALARM) {
+    void syncPrivateCloud().catch(() => undefined);
+  }
+});
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type !== 'tabverse_personal_cloud_sync_now') return false;
+  void syncPrivateCloud()
+    .then((result) => sendResponse({ ok: true, result }))
+    .catch((err) =>
+      sendResponse({
+        ok: false,
+        error: err instanceof Error ? err.message : String(err),
+      }),
+    );
+  return true;
+});
 
 // Tab previews (src/data/tabSpace/previewReaper). The table is a cache of
 // thumbnails keyed by chrome tab id, so it is only ever worth keeping while

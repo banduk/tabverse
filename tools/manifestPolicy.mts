@@ -18,7 +18,8 @@
  * decision as `host_permissions: ["<all_urls>"]`, which the manifest already
  * declares - the CSP is narrowed to schemes, not to hosts.
  */
-export const DEFAULT_CONNECT_SRC = "'self'";
+export const DEFAULT_CONNECT_SRC =
+  "'self' https://www.googleapis.com https://api.github.com";
 
 /**
  * The narrowed policy, for a user who wants the extension to talk to specific
@@ -31,7 +32,9 @@ export const DEFAULT_CONNECT_SRC = "'self'";
 export function connectSrcFor(allowedServers: string | undefined): string {
   // Offline-only build: a future backup provider needs a separately reviewed allowlist.
   if ((allowedServers ?? '').trim()) {
-    throw new Error('Remote synchronization is disabled in Tabverse Private');
+    throw new Error(
+      'Only personal Google Drive and GitHub APIs are authorized',
+    );
   }
   return DEFAULT_CONNECT_SRC;
 }

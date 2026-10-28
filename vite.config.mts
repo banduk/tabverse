@@ -29,6 +29,27 @@ function extensionManifest(): Plugin {
         readFileSync(fromRoot('src/manifest.json'), 'utf-8'),
       );
       manifest.version = pkg.version;
+      const extensionPublicKey = process.env.TABVERSE_EXTENSION_PUBLIC_KEY;
+      if (extensionPublicKey) {
+        if (!/^[A-Za-z0-9+/]+={0,2}$/.test(extensionPublicKey)) {
+          this.error('TABVERSE_EXTENSION_PUBLIC_KEY must be base64 DER');
+        }
+        manifest.key = extensionPublicKey;
+      }
+      const googleClientId = process.env.TABVERSE_GOOGLE_CLIENT_ID;
+      if (googleClientId) {
+        if (
+          !/^\d+-[a-z0-9]+\.apps\.googleusercontent\.com$/.test(googleClientId)
+        ) {
+          this.error(
+            'TABVERSE_GOOGLE_CLIENT_ID must be a Chrome OAuth client ID',
+          );
+        }
+        manifest.oauth2 = {
+          client_id: googleClientId,
+          scopes: ['https://www.googleapis.com/auth/drive.appdata'],
+        };
+      }
 
       const policy = manifest.content_security_policy?.extension_pages;
       if (!policy) {

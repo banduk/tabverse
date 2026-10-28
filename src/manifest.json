@@ -35,8 +35,5 @@
   "content_security_policy": {
     "extension_pages": "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data: blob:; frame-src 'none'; object-src 'none'"
   },
-  "optional_host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ]
+  "optional_host_permissions": ["http://*/*", "https://*/*"]
 }

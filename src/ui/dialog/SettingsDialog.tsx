@@ -63,7 +63,12 @@ export function SettingsBody(props: SettingsBodyProps) {
               <Icon icon="refresh" /> {t('settingsTabSync')}
             </span>
           }
-          panel={<p>Private build: external synchronization is disabled. Your data stays on this device.</p>}
+          panel={
+            <p>
+              Private build: external synchronization is disabled. Your data
+              stays on this device.
+            </p>
+          }
         />
         <Tab
           id="suspend"

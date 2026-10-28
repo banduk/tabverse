@@ -6,7 +6,9 @@ export function offlineFaviconSrc(source: string | undefined | null): string {
   if (
     source &&
     source.length <= 100_000 &&
-    /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/.test(source)
+    /^data:image\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/]+={0,2}$/.test(
+      source,
+    )
   ) {
     return source;
   }

@@ -28,7 +28,10 @@ for (const path of walk('dist')) {
     'liyu1981.github.io/my-awesome-web-tool-gallery',
     'dummyimage.com',
   ]) {
-    assert.ok(!content.includes(forbidden), `${path} contains blocked origin ${forbidden}`);
+    assert.ok(
+      !content.includes(forbidden),
+      `${path} contains blocked origin ${forbidden}`,
+    );
   }
 }
 console.log('Tabverse Private: offline build policy verified');

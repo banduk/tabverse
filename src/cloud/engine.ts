@@ -116,7 +116,12 @@ async function doSync(
     await runAsRemoteApply(async () => {
       await applyServerRecords(apply);
       for (const row of apply) {
-        if (row.deleted) await rememberRemoteDeletion(row);
+        if (row.deleted) {
+          await rememberRemoteDeletion({
+            ...row,
+            source: row.device_id ?? config.deviceId,
+          });
+        }
       }
     });
   }

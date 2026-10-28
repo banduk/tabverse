@@ -34,7 +34,7 @@ async function derive(passphrase: string, salt: Uint8Array): Promise<CryptoKey> 
     ['deriveKey'],
   );
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', hash: 'SHA-256', salt, iterations: ITERATIONS },
+    { name: 'PBKDF2', hash: 'SHA-256', salt: new Uint8Array(salt), iterations: ITERATIONS },
     base,
     { name: 'AES-GCM', length: 256 },
     false,
@@ -83,9 +83,9 @@ export async function unseal(
   try {
     const key = await derive(passphrase, salt);
     const clear = await crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv },
+      { name: 'AES-GCM', iv: new Uint8Array(iv) },
       key,
-      fromBase64(document.data),
+      new Uint8Array(fromBase64(document.data)),
     );
     return decoder.decode(clear);
   } catch {

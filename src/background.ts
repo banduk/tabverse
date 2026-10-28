@@ -3,6 +3,7 @@ import { dbAuditor as closedTabDbAuditor } from './data/closedTab/dbAuditor';
 import { logger } from './global';
 import { startChangeFeed } from './data/repo/changeFeed';
 import { syncPrivateCloud } from './cloud/engine';
+import { isVaultUnlocked } from './vault/keyring';
 import { dbAuditor as noteDbAuditor } from './data/note/dbAuditor';
 import { dbAuditor as tabSpaceDbAuditor } from './data/tabSpace/dbAuditor';
 import { dbAuditor as todoDbAuditor } from './data/todo/dbAuditor';
@@ -59,7 +60,9 @@ chrome.idle.onStateChanged.addListener(
 );
 
 // Cloud sync is opt-in, encrypted and limited to the selected personal account.
-void startChangeFeed();
+void isVaultUnlocked().then((open) => {
+  if (open) void startChangeFeed();
+});
 const CLOUD_SYNC_ALARM = 'tabverse_personal_cloud_sync';
 void chrome.alarms
   .get(CLOUD_SYNC_ALARM)
@@ -77,6 +80,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'tabverse_vault_unlocked') {
+    void startChangeFeed();
+    return false;
+  }
   if (message?.type !== 'tabverse_personal_cloud_sync_now') return false;
   void syncPrivateCloud()
     .then((result) => sendResponse({ ok: true, result }))

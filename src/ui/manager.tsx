@@ -32,6 +32,9 @@ import { renderPage } from './common/base';
 import { tabSpaceBootstrap } from '../data/tabSpaceBootstrap';
 import { tabSpaceStoreApi } from '../data/tabSpace/store';
 import { startChangeFeed } from '../data/repo/changeFeed';
+import { isVaultUnlocked, readVaultMetadata } from '../vault/keyring';
+import { migrateLocalVault } from '../vault/migrate';
+import { VaultUnlock } from '../vault/VaultUnlock';
 
 async function bootstrap() {
   const thisChromeTab = await chrome.tabs.getCurrent();
@@ -89,4 +92,34 @@ async function bootstrap() {
 
 logger.log('Tabverse extension id:', chrome.runtime.id);
 
-bootstrap();
+async function protectedBootstrap() {
+  const meta = await readVaultMetadata();
+  if (!meta || !(await isVaultUnlocked())) {
+    renderPage({
+      pageComponent: (
+        <VaultUnlock
+          onReady={() => {
+            void protectedBootstrap();
+          }}
+        />
+      ),
+    });
+    return;
+  }
+  await migrateLocalVault();
+  await bootstrap();
+}
+
+void protectedBootstrap().catch((err) => {
+  logger.error('Failed to unlock or migrate the local vault:', err);
+  renderPage({
+    pageComponent: (
+      <VaultUnlock
+        onReady={() => {
+          void protectedBootstrap();
+        }}
+        initialError={String(err)}
+      />
+    ),
+  });
+});

@@ -24,7 +24,12 @@ export const TabSpaceLogo = (props: TabSpaceLogoProps) => {
             onClick={expandSidebar}
             aria-label={t('commonExpandSidebar')}
           >
-            <img alt="" aria-hidden="true" className={classes.collapsedMark} src="icons/icon48.png" />
+            <img
+              alt=""
+              aria-hidden="true"
+              className={classes.collapsedMark}
+              src="icons/icon48.png"
+            />
           </button>
         </Tooltip>
       </div>
@@ -33,8 +38,15 @@ export const TabSpaceLogo = (props: TabSpaceLogoProps) => {
 
   return (
     <div className={classes.brand}>
-      <img alt="" aria-hidden="true" className={classes.mark} src="icons/icon48.png" />
-      <h1 className={classes.logo} style={props.textStyles}>{props.text ?? 'Tabverse'}</h1>
+      <img
+        alt=""
+        aria-hidden="true"
+        className={classes.mark}
+        src="icons/icon48.png"
+      />
+      <h1 className={classes.logo} style={props.textStyles}>
+        {props.text ?? 'Tabverse'}
+      </h1>
     </div>
   );
 };

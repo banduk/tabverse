@@ -39,19 +39,29 @@ export function SidePanelView() {
       void (async () => {
         try {
           const current = await chrome.windows.getCurrent();
-          if (current.id === undefined) throw new Error('Janela não encontrada');
+          if (current.id === undefined)
+            throw new Error('Janela não encontrada');
           const currentTabs = await chrome.tabs.query({ windowId: current.id });
-          const groupIds = Array.from(new Set(
-            currentTabs.map((tab) => tab.groupId).filter((id) => id !== NO_GROUP),
-          ));
-          const groupRows = await Promise.all(groupIds.map(async (id) => {
-            try {
-              const group = await chrome.tabGroups.get(id);
-              return [id, { title: group.title || 'Grupo de abas', color: group.color }] as const;
-            } catch {
-              return [id, { title: 'Grupo de abas', color: 'grey' }] as const;
-            }
-          }));
+          const groupIds = Array.from(
+            new Set(
+              currentTabs
+                .map((tab) => tab.groupId)
+                .filter((id) => id !== NO_GROUP),
+            ),
+          );
+          const groupRows = await Promise.all(
+            groupIds.map(async (id) => {
+              try {
+                const group = await chrome.tabGroups.get(id);
+                return [
+                  id,
+                  { title: group.title || 'Grupo de abas', color: group.color },
+                ] as const;
+              } catch {
+                return [id, { title: 'Grupo de abas', color: 'grey' }] as const;
+              }
+            }),
+          );
           const recent = await queryRecentSavedTabSpaces(8);
           if (!active || currentRevision !== revision) return;
           setWindowId(current.id);
@@ -75,8 +85,15 @@ export function SidePanelView() {
     chrome.tabs.onActivated.addListener(refresh);
     chrome.tabGroups.onUpdated.addListener(refresh);
     window.addEventListener('focus', refresh);
-    const storageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
-      if (areaName === 'session' && changes[VAULT_SESSION_KEY] && !changes[VAULT_SESSION_KEY].newValue) {
+    const storageChanged = (
+      changes: { [key: string]: chrome.storage.StorageChange },
+      areaName: string,
+    ) => {
+      if (
+        areaName === 'session' &&
+        changes[VAULT_SESSION_KEY] &&
+        !changes[VAULT_SESSION_KEY].newValue
+      ) {
         setLocked(true);
       }
     };
@@ -110,15 +127,21 @@ export function SidePanelView() {
 
   const matches = normalized(search);
   const displayedTabs = useMemo(
-    () => tabs.filter((tab) =>
-      !matches || normalized((tab.title || '') + ' ' + (tab.url || '')).includes(matches),
-    ),
+    () =>
+      tabs.filter(
+        (tab) =>
+          !matches ||
+          normalized((tab.title || '') + ' ' + (tab.url || '')).includes(
+            matches,
+          ),
+      ),
     [tabs, matches],
   );
   const displayedSaved = useMemo(
-    () => saved.filter((space) =>
-      !matches || normalized(space.name).includes(matches),
-    ),
+    () =>
+      saved.filter(
+        (space) => !matches || normalized(space.name).includes(matches),
+      ),
     [saved, matches],
   );
   const sortedGroupIds = useMemo(() => {
@@ -151,12 +174,16 @@ export function SidePanelView() {
 
   async function openSaved(space: TabSpace): Promise<void> {
     try {
-      const existing = (await queryOpenTabSpaces()).find((item) => item.tabSpaceId === space.id);
+      const existing = (await queryOpenTabSpaces()).find(
+        (item) => item.tabSpaceId === space.id,
+      );
       if (existing) {
         await switchToOpenTabSpace(existing);
       } else {
         // A saved workspace gets its own window: never replace the user's current work.
-        await chrome.windows.create({ url: tabverseUrl(TabSpaceOp.LoadSaved, space.id) });
+        await chrome.windows.create({
+          url: tabverseUrl(TabSpaceOp.LoadSaved, space.id),
+        });
       }
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : String(reason));
@@ -168,7 +195,11 @@ export function SidePanelView() {
       <main className="tv-side-locked" role="status">
         <h1>Cofre bloqueado</h1>
         <p>Desbloqueie o Tabverse no gerenciador para acessar dados salvos.</p>
-        <button className="tv-side-primary" type="button" onClick={() => void openManager()}>
+        <button
+          className="tv-side-primary"
+          type="button"
+          onClick={() => void openManager()}
+        >
           Abrir gerenciador
         </button>
       </main>
@@ -179,61 +210,184 @@ export function SidePanelView() {
     <main className="tv-side-shell">
       <header className="tv-side-header">
         <div className="tv-side-brand">
-          <span className="tv-side-brand-icon" aria-hidden="true">▦</span>
+          <span className="tv-side-brand-icon" aria-hidden="true">
+            ▦
+          </span>
           <strong>Tabverse</strong>
         </div>
-        <button type="button" className="tv-side-icon-button" title="Abrir gerenciador completo" aria-label="Abrir gerenciador completo" onClick={() => void openManager()}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+        <button
+          type="button"
+          className="tv-side-icon-button"
+          title="Abrir gerenciador completo"
+          aria-label="Abrir gerenciador completo"
+          onClick={() => void openManager()}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            aria-hidden="true"
+          >
             <path d="M13 4h7v7M20 4l-10 10M20 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h5" />
           </svg>
         </button>
       </header>
       <div className="tv-side-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
-        <input ref={searchInput} aria-label="Pesquisar abas e espaços salvos" placeholder="Pesquisar abas e espaços…" value={search} onChange={(event) => setSearch(event.target.value)} />
-        {search ? <button type="button" aria-label="Limpar pesquisa" onClick={() => setSearch('')}>×</button> : <kbd>⌘ K</kbd>}
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="6.5" />
+          <path d="m16 16 4.5 4.5" />
+        </svg>
+        <input
+          ref={searchInput}
+          aria-label="Pesquisar abas e espaços salvos"
+          placeholder="Pesquisar abas e espaços…"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        {search ? (
+          <button
+            type="button"
+            aria-label="Limpar pesquisa"
+            onClick={() => setSearch('')}
+          >
+            ×
+          </button>
+        ) : (
+          <kbd>⌘ K</kbd>
+        )}
       </div>
       <nav className="tv-side-tabs" aria-label="Navegação do painel">
-        <button type="button" className={section === 'tabs' ? 'selected' : ''} onClick={() => setSection('tabs')} aria-current={section === 'tabs' ? 'page' : undefined}>Abas <span>{displayedTabs.length}</span></button>
-        <button type="button" className={section === 'saved' ? 'selected' : ''} onClick={() => setSection('saved')} aria-current={section === 'saved' ? 'page' : undefined}>Salvos <span>{displayedSaved.length}</span></button>
+        <button
+          type="button"
+          className={section === 'tabs' ? 'selected' : ''}
+          onClick={() => setSection('tabs')}
+          aria-current={section === 'tabs' ? 'page' : undefined}
+        >
+          Abas <span>{displayedTabs.length}</span>
+        </button>
+        <button
+          type="button"
+          className={section === 'saved' ? 'selected' : ''}
+          onClick={() => setSection('saved')}
+          aria-current={section === 'saved' ? 'page' : undefined}
+        >
+          Salvos <span>{displayedSaved.length}</span>
+        </button>
       </nav>
       <div className="tv-side-content">
-        {error ? <p role="alert" className="tv-side-error">{error}</p> : null}
+        {error ? (
+          <p role="alert" className="tv-side-error">
+            {error}
+          </p>
+        ) : null}
         {section === 'tabs' ? (
-          displayedTabs.length ? sortedGroupIds.map((groupId) => {
-            const rows = displayedTabs.filter((tab) => tab.groupId === groupId);
-            const group = groups[groupId];
-            return (
-              <section key={groupId} aria-label={group?.title || 'Sem grupo'}>
-                <h2 className="tv-side-group"><span className="tv-side-group-dot" data-color={group?.color || 'grey'} />{group?.title || 'Sem grupo'}<span className="tv-side-count">{rows.length}</span></h2>
-                {rows.map((tab) => (
-                  <button className={'tv-side-row' + (tab.active ? ' active' : '')} key={tab.id} type="button" title={tab.title || tab.url || ''} onClick={() => tab.id !== undefined && void chrome.tabs.update(tab.id, { active: true }).catch((reason) => setError(String(reason)))}>
-                    <span className="tv-side-favicon" aria-hidden="true">{(tab.title || '•').slice(0, 1).toUpperCase()}</span>
-                    <span className="tv-side-row-text"><strong>{tab.title || 'Nova aba'}</strong><small>{tab.url ? new URL(tab.url).hostname : 'Chrome'}</small></span>
-                    {tab.pinned ? <span className="tv-side-pinned" title="Fixada" aria-label="Fixada">●</span> : null}
-                  </button>
-                ))}
-              </section>
-            );
-          }) : <p className="tv-side-empty">Nenhuma aba encontrada.</p>
+          displayedTabs.length ? (
+            sortedGroupIds.map((groupId) => {
+              const rows = displayedTabs.filter(
+                (tab) => tab.groupId === groupId,
+              );
+              const group = groups[groupId];
+              return (
+                <section key={groupId} aria-label={group?.title || 'Sem grupo'}>
+                  <h2 className="tv-side-group">
+                    <span
+                      className="tv-side-group-dot"
+                      data-color={group?.color || 'grey'}
+                    />
+                    {group?.title || 'Sem grupo'}
+                    <span className="tv-side-count">{rows.length}</span>
+                  </h2>
+                  {rows.map((tab) => (
+                    <button
+                      className={'tv-side-row' + (tab.active ? ' active' : '')}
+                      key={tab.id}
+                      type="button"
+                      title={tab.title || tab.url || ''}
+                      onClick={() =>
+                        tab.id !== undefined &&
+                        void chrome.tabs
+                          .update(tab.id, { active: true })
+                          .catch((reason) => setError(String(reason)))
+                      }
+                    >
+                      <span className="tv-side-favicon" aria-hidden="true">
+                        {(tab.title || '•').slice(0, 1).toUpperCase()}
+                      </span>
+                      <span className="tv-side-row-text">
+                        <strong>{tab.title || 'Nova aba'}</strong>
+                        <small>
+                          {tab.url ? new URL(tab.url).hostname : 'Chrome'}
+                        </small>
+                      </span>
+                      {tab.pinned ? (
+                        <span
+                          className="tv-side-pinned"
+                          title="Fixada"
+                          aria-label="Fixada"
+                        >
+                          ●
+                        </span>
+                      ) : null}
+                    </button>
+                  ))}
+                </section>
+              );
+            })
+          ) : (
+            <p className="tv-side-empty">Nenhuma aba encontrada.</p>
+          )
+        ) : displayedSaved.length ? (
+          <section aria-label="Espaços salvos">
+            <h2 className="tv-side-group">
+              Espaços recentes{' '}
+              <span className="tv-side-count">{displayedSaved.length}</span>
+            </h2>
+            {displayedSaved.map((space) => (
+              <button
+                key={space.id}
+                className="tv-side-row"
+                type="button"
+                onClick={() => void openSaved(space)}
+              >
+                <span
+                  className="tv-side-favicon tv-side-folder"
+                  aria-hidden="true"
+                >
+                  ▤
+                </span>
+                <span className="tv-side-row-text">
+                  <strong>{space.name || 'Sem nome'}</strong>
+                  <small>{space.tabs.size} abas salvas</small>
+                </span>
+                <span className="tv-side-arrow" aria-hidden="true">
+                  ›
+                </span>
+              </button>
+            ))}
+          </section>
         ) : (
-          displayedSaved.length ? (
-            <section aria-label="Espaços salvos">
-              <h2 className="tv-side-group">Espaços recentes <span className="tv-side-count">{displayedSaved.length}</span></h2>
-              {displayedSaved.map((space) => (
-                <button key={space.id} className="tv-side-row" type="button" onClick={() => void openSaved(space)}>
-                  <span className="tv-side-favicon tv-side-folder" aria-hidden="true">▤</span>
-                  <span className="tv-side-row-text"><strong>{space.name || 'Sem nome'}</strong><small>{space.tabs.size} abas salvas</small></span>
-                  <span className="tv-side-arrow" aria-hidden="true">›</span>
-                </button>
-              ))}
-            </section>
-          ) : <p className="tv-side-empty">Nenhum espaço salvo encontrado.</p>
+          <p className="tv-side-empty">Nenhum espaço salvo encontrado.</p>
         )}
       </div>
       <footer className="tv-side-footer">
-        <span className="tv-side-privacy"><span aria-hidden="true" className="tv-side-status-dot" />Cofre desbloqueado</span>
-        <button type="button" className="tv-side-primary" onClick={() => void openManager()}>Abrir gerenciador completo</button>
+        <span className="tv-side-privacy">
+          <span aria-hidden="true" className="tv-side-status-dot" />
+          Cofre desbloqueado
+        </span>
+        <button
+          type="button"
+          className="tv-side-primary"
+          onClick={() => void openManager()}
+        >
+          Abrir gerenciador completo
+        </button>
       </footer>
     </main>
   );

@@ -558,7 +558,7 @@
     "message": " ($1). Conectar de nuevo reemplaza esta configuración."
   },
   "syncOfficialModeTitle": {
-    "message": "Inicia sesión en tabversed.liyu1981.xyz y permite este dispositivo"
+    "message": "Inicia sesión en Tabverse Private (offline) y permite este dispositivo"
   },
   "syncCustomModeTitle": {
     "message": "Un servidor tabversed que tú mismo ejecutas, emparejado con un código"

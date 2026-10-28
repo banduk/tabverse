@@ -558,7 +558,7 @@
     "message": "（$1）。再次連線會取代目前的設定。"
   },
   "syncOfficialModeTitle": {
-    "message": "在 tabversed.liyu1981.xyz 登入並允許此裝置"
+    "message": "在 Tabverse Private (offline) 登入並允許此裝置"
   },
   "syncCustomModeTitle": {
     "message": "你自己執行的 tabversed 伺服器，以配對碼連線"

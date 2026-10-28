@@ -89,7 +89,7 @@ func Handler(frameAncestors string) http.Handler {
 	// Blueprint sets from JS (a Popover's position); scripts stay external and
 	// same-origin. `frame-ancestors` is the one directive a deployment sets.
 	policy := "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +
-		"img-src 'self' data: https: http:; connect-src 'self'; base-uri 'none'; " +
+		"img-src 'self' data:; connect-src 'self'; base-uri 'none'; " +
 		"form-action 'none'; frame-ancestors " + frameAncestors
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

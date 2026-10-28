@@ -18,7 +18,7 @@
  * decision as `host_permissions: ["<all_urls>"]`, which the manifest already
  * declares - the CSP is narrowed to schemes, not to hosts.
  */
-export const DEFAULT_CONNECT_SRC = "'self' https: wss: http: ws:";
+export const DEFAULT_CONNECT_SRC = "'self'";
 
 /**
  * The narrowed policy, for a user who wants the extension to talk to specific
@@ -29,29 +29,11 @@ export const DEFAULT_CONNECT_SRC = "'self' https: wss: http: ws:";
  * thing people get wrong in a way that only shows up as a failed reconnect.
  */
 export function connectSrcFor(allowedServers: string | undefined): string {
-  const origins = (allowedServers ?? '')
-    .split(',')
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-
-  if (origins.length === 0) {
-    return DEFAULT_CONNECT_SRC;
+  // Offline-only build: a future backup provider needs a separately reviewed allowlist.
+  if ((allowedServers ?? '').trim()) {
+    throw new Error('Remote synchronization is disabled in Tabverse Private');
   }
-
-  // Deduped in insertion order: 'self' first, then each server and its socket
-  // form, so a rebuilt manifest does not churn on unrelated changes.
-  const parts = new Set<string>(["'self'"]);
-  for (const origin of origins) {
-    if (!/^https?:\/\/[^/?#]+$/.test(origin)) {
-      throw new Error(
-        `TABVERSE_ALLOWED_SERVERS: "${origin}" is not an origin like ` +
-          'http://192.168.0.221:8223 (scheme, host and optional port only, no path)',
-      );
-    }
-    parts.add(origin);
-    parts.add(origin.replace(/^http:/, 'ws:').replace(/^https:/, 'wss:'));
-  }
-  return [...parts].join(' ');
+  return DEFAULT_CONNECT_SRC;
 }
 
 /** Replaces the `connect-src` directive of a CSP string, adding it if absent. */

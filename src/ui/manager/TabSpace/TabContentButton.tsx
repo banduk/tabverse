@@ -49,6 +49,7 @@ import { setChatContext } from '../../../data/aiChat/store';
 import { addNoteToTabSpace, newSummaryNote } from '../../../data/note/util';
 import { markdownToPlainText } from '../../../data/note/markdownText';
 import { convertTabToMarkdown } from '../../../data/tabSpace/pageMarkdown';
+import { requestPageReadPermission } from '../../../data/tabSpace/pagePermission';
 import { extractTabText } from '../../../data/tabSpace/tabText';
 import { ToolTabMsg, sendPubSubMessage } from '../../../message/message';
 import { $selectedNoteId, getNoteEditor } from '../../notebook/selectedNote';
@@ -251,6 +252,11 @@ export function TabContentButton(props: TabContentButtonProps) {
       setBusy(true);
       setStatus(null);
       try {
+        // Request per-site access directly from the user's click.
+        if (!(await requestPageReadPermission(tab.url))) {
+          setStatus(t(UNREADABLE_STATUS));
+          return;
+        }
         if (mode === 'view') {
           const markdown = await readAsMarkdown();
           if (!markdown) {

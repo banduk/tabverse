@@ -1,3 +1,4 @@
+import { offlineFaviconSrc } from '../../../../src/ui/common/offlineFavicon';
 import React from 'react';
 
 import bookmarkClasses from '../../../../src/ui/bookmark/BookmarkView.module.scss';
@@ -35,7 +36,7 @@ export function BookmarkPanel(props: { bookmarks: Bookmark[] }) {
                   <img
                     alt=""
                     aria-hidden={true}
-                    src={bookmark.favIconUrl}
+                    src={offlineFaviconSrc(bookmark.favIconUrl)}
                     width="32"
                     height="32"
                   />

@@ -1,3 +1,4 @@
+import { offlineFaviconSrc } from '../../../../src/ui/common/offlineFavicon';
 import React, { useState } from 'react';
 
 import { calendarLabel } from '../../../../src/time';
@@ -49,7 +50,7 @@ export function HistoryList(props: { entries: ClosedTab[]; grouped: boolean }) {
             <img
               alt=""
               aria-hidden={true}
-              src={closed.favIconUrl}
+              src={offlineFaviconSrc(closed.favIconUrl)}
               width="32"
               height="32"
             />

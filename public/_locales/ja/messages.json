@@ -558,7 +558,7 @@
     "message": "（$1）に接続しています。再接続するとこの設定は置き換わります。"
   },
   "syncOfficialModeTitle": {
-    "message": "tabversed.liyu1981.xyz でサインインし、この端末を許可"
+    "message": "Tabverse Private (offline) でサインインし、この端末を許可"
   },
   "syncCustomModeTitle": {
     "message": "自分で運用する tabversed サーバーに、コードでペアリング"

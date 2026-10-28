@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './FavIcon.module.scss';
 import clsx from 'clsx';
+import { offlineFaviconSrc } from './offlineFavicon';
 
 interface IFavIconProps {
   url: string;
@@ -30,11 +31,7 @@ export const FavIcon = (props: IFavIconProps) => {
         alt=""
         aria-hidden={true}
         className={classes.img}
-        src={
-          props.url.length > 0
-            ? props.url
-            : 'https://dummyimage.com/32x32/bbbbbb/111111&text=Logo'
-        }
+        src={offlineFaviconSrc(props.url)}
       />
     </span>
   );

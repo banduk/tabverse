@@ -104,7 +104,10 @@ async function captureGroupsOfWindow(tabIdByChromeTabId: Map<number, string>) {
   }
 }
 
+const AUTO_CAPTURE_PREVIEWS = false; // Privacy: no automatic screenshots.
+
 function doCapturePreview(chromeTabId: number, chromeWindowId: number) {
+  if (!AUTO_CAPTURE_PREVIEWS) return;
   if (isJestTest() && (chrome as { mocked?: boolean }).mocked) {
     // in our mock testing, the chrome is mockChrome which will have
     // .mocked=true

@@ -8,6 +8,9 @@ export const SENSITIVE_STORAGE_KEYS = [
   'tabverse_prompt_log_v1',
   'tabverse_outbox_v1',
   'tabverse_sync_config_v1',
+  'tabverse_suspend_whitelist_v2',
+  'tabverse_dedup_ignore_v1',
+  'tabverse_dedup_dismissed_v1',
 ] as const;
 
 const SENSITIVE = new Set<string>(SENSITIVE_STORAGE_KEYS);

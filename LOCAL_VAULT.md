@@ -6,7 +6,8 @@
 - The data key is wrapped using PBKDF2-SHA256 (310,000 iterations) and AES-GCM.
 - Only the wrapped key and a salt/nonce persist in chrome.storage.local.
 - The unwrapped key stays in chrome.storage.session (memory, cleared at restart).
-- Sensitive IndexedDB **record fields** and AI chat/prompt log records are
+- Sensitive IndexedDB **record fields**, suspension whitelist URLs, duplicate
+  suppression rules, and AI chat/prompt log records are
   AES-GCM encrypted with fresh nonces and authenticated associated data.
 - Private cloud encrypted snapshots remain independently encrypted by PR #2.
 - SQLite/SQLCipher is not required; this is Dexie DBCore middleware.

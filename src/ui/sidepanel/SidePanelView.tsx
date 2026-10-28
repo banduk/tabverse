@@ -334,9 +334,7 @@ export function SidePanelView() {
                       </span>
                       <span className="tv-side-row-text">
                         <strong>{tab.title || 'Nova aba'}</strong>
-                        <small>
-                          {tab.url ? hostOf(tab.url) : 'Chrome'}
-                        </small>
+                        <small>{tab.url ? hostOf(tab.url) : 'Chrome'}</small>
                       </span>
                       {tab.pinned ? (
                         <span

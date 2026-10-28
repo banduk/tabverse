@@ -17,3 +17,9 @@ body {
 .stickyOn .header {
   box-shadow: 0 2px 10px -5px rgb(16 22 26 / 60%);
 }
+
+
+/* The manager keeps three columns: navigation, workspace, tools inspector. */
+body { color: var(--tv-text); background: var(--tv-bg); }
+.stickyOn .header { box-shadow: none; }
+

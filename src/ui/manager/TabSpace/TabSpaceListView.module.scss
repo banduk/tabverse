@@ -129,3 +129,14 @@
   color: global.$color-a;
   text-align: center;
 }
+
+
+/* Dense, unboxed tab list with a restrained sticky header. */
+.container { margin: 0; padding: 24px 28px 36px; }
+.header { background: var(--tv-bg); border: 0; border-bottom: 1px solid var(--tv-border); border-radius: 0; padding: 8px 0 18px; box-shadow: none; margin: 0 0 14px; }
+.stickyOn { background: var(--tv-bg); }
+.stickyOn .header { box-shadow: none; }
+.titleH1 { margin: 0; font-size: 24px; font-weight: 600; }
+.toolbarMiddleContainer { background: var(--tv-selected); color: var(--tv-accent); border-radius: 18px; }
+.tabIsActiveMatch { border-radius: 8px; outline-color: var(--tv-accent); }
+

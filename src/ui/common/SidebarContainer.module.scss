@@ -84,3 +84,14 @@ $transition-time: 200ms;
 .collapseToggle :global(.bp6-button):focus :global(.bp6-icon) > svg {
   fill: #ffffff;
 }
+
+
+/* Compact Chrome-style navigation rail, without the per-workspace rainbow fill. */
+.topContainer { --sidebar-width: 244px; }
+.topContainer.collapsed { --sidebar-width: 60px; }
+.leftContainer { background: var(--tv-alt); border-right: 1px solid var(--tv-border); padding: 16px 10px 68px; overflow-y: auto; overflow-x: hidden; }
+.collapseToggle :global(.bp6-button) { background: transparent; color: var(--tv-muted); }
+.collapseToggle :global(.bp6-button) :global(.bp6-icon) > svg,
+.collapseToggle :global(.bp6-button):hover :global(.bp6-icon) > svg { fill: var(--tv-muted); }
+.collapseToggle :global(.bp6-button):hover { color: var(--tv-text); background: var(--tv-hover); }
+

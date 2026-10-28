@@ -48,3 +48,19 @@
     min-width: 0;
   }
 }
+
+
+/* Right inspector is intentionally narrow, as in Chrome's bookmark manager. */
+.container { height: 100vh; }
+.mainContainer { background: var(--tv-bg); }
+.rightSideContainer {
+  flex: 0 0 340px; width: 340px; max-width: 340px; min-width: 0;
+  background: var(--tv-alt); box-shadow: none; border-left: 1px solid var(--tv-border);
+}
+@container (max-width: 950px) {
+  .rightSideContainer { flex: 0 1 300px; max-width: 300px; }
+}
+@container (max-width: 740px) {
+  .rightSideContainer { display: none; }
+}
+

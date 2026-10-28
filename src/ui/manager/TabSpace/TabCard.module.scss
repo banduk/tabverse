@@ -229,3 +229,16 @@
   background: global.$color-light-accent;
   color: global.$color-c;
 }
+
+
+/* Compact Chrome-like rows, showing actions without heavy cards or shadows. */
+.card {
+  margin-top: 0; min-height: 53px; padding: 10px 12px; border: 0;
+  border-radius: 7px; border-bottom: 1px solid var(--tv-border);
+  background: transparent; box-shadow: none; color: var(--tv-text);
+}
+.card:hover, .card:focus-within { background: var(--tv-hover); }
+.tabTitle { font-size: 13px; font-weight: 500; color: var(--tv-text); }
+.tabUrl { color: var(--tv-muted); font-size: 11px; }
+.dragHandle { color: var(--tv-muted); }
+

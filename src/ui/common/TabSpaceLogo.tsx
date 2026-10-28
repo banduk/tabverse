@@ -4,21 +4,15 @@ import React from 'react';
 import { t } from '../../i18n';
 import { useSidebarActions } from './SidebarContainer';
 import classes from './TabSpaceLogo.module.scss';
-import { merge } from 'lodash';
 
 export interface TabSpaceLogoProps {
   collapsed?: boolean;
-  /** dev page override for the universe graphic position */
   universeShapeStyles?: React.CSSProperties;
-  /** dev page override for the wordmark position */
   textStyles?: React.CSSProperties;
   text?: string;
 }
 
 export const TabSpaceLogo = (props: TabSpaceLogoProps) => {
-  // the rail is 72px wide: the wordmark and the universe graphic do not fit, so
-  // only the square mark is shown (the decoration is the same as expanded).
-  // With no chevron in the rail, this mark is also the way back out.
   const { expandSidebar } = useSidebarActions();
   if (props.collapsed) {
     return (
@@ -30,56 +24,17 @@ export const TabSpaceLogo = (props: TabSpaceLogoProps) => {
             onClick={expandSidebar}
             aria-label={t('commonExpandSidebar')}
           >
-            {/* decorative: the button is already labelled by aria-label */}
-            <img
-              alt=""
-              aria-hidden={true}
-              className={classes.collapsedMark}
-              src="icons/icon128.png"
-            />
+            <img alt="" aria-hidden="true" className={classes.collapsedMark} src="icons/icon48.png" />
           </button>
         </Tooltip>
       </div>
     );
   }
+
   return (
-    <div
-      style={{
-        minHeight: '80px',
-        position: 'relative',
-        display: 'table',
-        maxWidth: '295px',
-        margin: '0 auto',
-      }}
-    >
-      <div>
-        {/* decorative: the wordmark below carries the name */}
-        <img
-          alt=""
-          aria-hidden={true}
-          style={merge(
-            {
-              position: 'absolute',
-              top: '-64px',
-              right: '-82px',
-            },
-            props.universeShapeStyles,
-          )}
-          src="static/tabverse_logo_universe.svg"
-        />
-      </div>
-      <div
-        style={merge(
-          {
-            display: 'table-cell',
-            position: 'relative',
-            zIndex: 10,
-          },
-          props.textStyles,
-        )}
-      >
-        <h1 className={classes.logo}>{props.text ?? 'TABVERSE'}</h1>
-      </div>
+    <div className={classes.brand}>
+      <img alt="" aria-hidden="true" className={classes.mark} src="icons/icon48.png" />
+      <h1 className={classes.logo} style={props.textStyles}>{props.text ?? 'Tabverse'}</h1>
     </div>
   );
 };

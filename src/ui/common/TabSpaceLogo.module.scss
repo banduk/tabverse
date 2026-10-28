@@ -1,74 +1,9 @@
-@font-face {
-  font-family: 'Shrikhand';
-  src: url('./resource/Shrikhand.woff2') format('woff2');
-}
 
-/*
- * Collapsed rail: just the app mark, the wordmark does not fit. It is also the
- * expand button (there is no chevron in the rail), so it is a real button with
- * hover/focus feedback.
- */
-.collapsedContainer {
-  display: flex;
-  justify-content: center;
-  padding: 12px 0 10px 0;
-}
-
-.collapsedMarkButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 0;
-  background: none;
-  border-radius: 14px;
-  cursor: pointer;
-  transition:
-    transform 120ms ease-in-out,
-    background-color 120ms ease-in-out;
-}
-
-.collapsedMarkButton:hover,
-.collapsedMarkButton:focus-visible {
-  background-color: rgb(255 255 255 / 16%);
-  transform: scale(1.06);
-}
-
-.collapsedMark {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-}
-
-.logo {
-  background: linear-gradient(
-    #fd004c 16.7%,
-    #fe9000 16.7%,
-    #fe9000 33.4%,
-    #fff020 33.4%,
-    #fff020 50.1%,
-    #3edf4b 50.1%,
-    #3edf4b 66.8%,
-    #3363ff 66.8%,
-    #3363ff 83.5%,
-    #b102b7 83.5%
-  );
-  color: transparent;
-  -webkit-text-stroke: 0.04em #ffffff;
-  -webkit-background-clip: text;
-  background-clip: text;
-  animation: rainbow 60s cubic-bezier(0.1, -0.6, 0.2, 0) infinite;
-  font-size: 36px;
-  font-family: 'Shrikhand';
-  width: 200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-:global {
-  @keyframes rainbow {
-    100% {
-      background-position: 0 30em;
-    }
-  }
-}
+/* Compact brand instead of the previous rainbow display wordmark. */
+.brand { display: flex; align-items: center; gap: 10px; min-height: 70px; padding: 10px 12px 16px; }
+.mark { width: 26px; height: 26px; border-radius: 6px; }
+.logo { color: var(--tv-text); font: 600 17px/1.2 Arial, Helvetica, system-ui, sans-serif; margin: 0; letter-spacing: -.25px; }
+.collapsedContainer { display: flex; justify-content: center; padding: 10px 0 12px; }
+.collapsedMarkButton { background: transparent; border: 0; border-radius: 9px; width: 40px; height: 40px; display: grid; place-items: center; cursor: pointer; }
+.collapsedMarkButton:hover { background: var(--tv-hover); }
+.collapsedMark { width: 25px; height: 25px; border-radius: 5px; }

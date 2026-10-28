@@ -340,6 +340,7 @@ export function SidePanelView() {
                         <span
                           className="tv-side-pinned"
                           title="Fixada"
+                          role="img"
                           aria-label="Fixada"
                         >
                           ●

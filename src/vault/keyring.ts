@@ -151,7 +151,10 @@ export async function isVaultUnlocked(): Promise<boolean> {
 
 export async function lockVault(): Promise<void> {
   cached = null;
-  await chrome.storage.session.remove([VAULT_SESSION_KEY, 'tabverse_private_cloud_session_v1']);
+  await chrome.storage.session.remove([
+    VAULT_SESSION_KEY,
+    'tabverse_private_cloud_session_v1',
+  ]);
 }
 
 /** Lock other extension contexts when the user locks this one. */

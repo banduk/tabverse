@@ -30,6 +30,13 @@ import {
 
 setDebugLogLevel(TabSpaceLogLevel.LOG);
 
+// Minimize exposure of persistent extension data to untrusted content scripts.
+void chrome.storage.local
+  .setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' })
+  .catch((err) => logger.error('Cannot restrict local storage access', err));
+// Idle-lock timeout (not the browser's short default interval).
+chrome.idle.setDetectionInterval(15 * 60);
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.query({ active: true }, (tabs) => {
     tabs[0] && chrome.tabs.reload(tabs[0].id);

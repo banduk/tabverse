@@ -129,39 +129,120 @@ export function applyVaultMiddleware(db: Dexie): void {
             Dexie.waitFor(vaultKey()).then(() => inner.count(request)),
           openCursor: async (request) => {
             await Dexie.waitFor(vaultKey());
-            const cursor = await inner.openCursor(request);
-            if (!cursor || !request.values) return cursor;
-            // Cursor value is synchronous; prepare a decrypted copy for each
-            // cursor step, including start(), which drives Dexie's each().
-            const wrap = async (c: typeof cursor): Promise<typeof cursor> => {
-              const decoded = await Dexie.waitFor(read(c.value));
-              let current = decoded;
-              return new Proxy(c, {
-                get(target, prop) {
-                  if (prop === 'value') return current;
-                  if (prop === 'next') {
-                    return async () => {
-                      const next = await target.next();
-                      return next ? wrap(next) : next;
-                    };
-                  }
-                  if (prop === 'start') {
-                    return (onNext: () => void) =>
-                      target.start(() => {
-                        void Dexie.waitFor(read(target.value)).then((value) => {
-                          current = value;
-                          onNext();
-                        });
-                      });
-                  }
-                  const value = Reflect.get(target, prop);
-                  return typeof value === 'function'
-                    ? value.bind(target)
-                    : value;
-                },
+            const native = await inner.openCursor(request);
+            if (!native || !request.values) return native;
+
+            // Async decryption inside an IDB cursor callback can deadlock
+            // Dexie's start()/continue() protocol. Drain raw rows first,
+            // finish the IDB transaction, then iterate decrypted rows.
+            // This is intentionally bounded by the caller's query range.
+            const found: {
+              key: any;
+              primaryKey: any;
+              value: any;
+            }[] = [];
+            await native.start(() => {
+              found.push({
+                key: native.key,
+                primaryKey: native.primaryKey,
+                value: native.value,
               });
+              native.continue();
+            });
+
+            const values = await readMany(found.map((row) => row.value));
+            const rows = found.map((row, index) => ({
+              ...row,
+              value: values[index],
+            }));
+            let position = 0;
+            let onNext: (() => void) | null = null;
+            let resolve: ((value?: any) => void) | null = null;
+            let reject: ((reason?: any) => void) | null = null;
+            let done = false;
+
+            const step = () => {
+              if (done) return;
+              if (position >= rows.length) {
+                done = true;
+                resolve?.();
+                return;
+              }
+              try {
+                onNext?.();
+              } catch (error) {
+                done = true;
+                reject?.(error);
+              }
             };
-            return wrap(cursor);
+            const advance = (count: number) => {
+              position += count;
+              queueMicrotask(step);
+            };
+            const proxy = {
+              trans: request.trans,
+              get key() {
+                return rows[position]?.key;
+              },
+              get primaryKey() {
+                return rows[position]?.primaryKey;
+              },
+              get value() {
+                return rows[position]?.value;
+              },
+              get done() {
+                return done || position >= rows.length;
+              },
+              continue(key?: any) {
+                if (key === undefined) {
+                  advance(1);
+                  return;
+                }
+                position += 1;
+                while (
+                  position < rows.length &&
+                  dbcore.cmp(rows[position].key, key) < 0
+                ) {
+                  position += 1;
+                }
+                queueMicrotask(step);
+              },
+              continuePrimaryKey(key: any, primaryKey: any) {
+                position += 1;
+                while (
+                  position < rows.length &&
+                  (dbcore.cmp(rows[position].key, key) < 0 ||
+                    (dbcore.cmp(rows[position].key, key) === 0 &&
+                      dbcore.cmp(rows[position].primaryKey, primaryKey) < 0))
+                ) {
+                  position += 1;
+                }
+                queueMicrotask(step);
+              },
+              advance,
+              start(callback: () => void) {
+                onNext = callback;
+                done = false;
+                return new Promise<any>((yes, no) => {
+                  resolve = yes;
+                  reject = no;
+                  queueMicrotask(step);
+                });
+              },
+              stop(value?: any) {
+                done = true;
+                resolve?.(value);
+              },
+              fail(error: Error) {
+                done = true;
+                reject?.(error);
+              },
+              async next() {
+                position += 1;
+                return proxy;
+              },
+            };
+            return proxy;
           },
         };
       },

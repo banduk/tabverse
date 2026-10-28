@@ -1,5 +1,4 @@
 import { db } from '../../storage/db';
-import { map } from 'lodash';
 import { Bookmark, BOOKMARK_DB_TABLE_NAME } from './Bookmark';
 import { ALLBOOKMARK_DB_TABLE_NAME } from './AllBookmark';
 import { getLogger } from '../../storage/dbAuditorManager';
@@ -10,13 +9,14 @@ export async function dbAuditor(logs: string[]): Promise<void> {
   const bookmarksData = await db
     .table<Bookmark>(BOOKMARK_DB_TABLE_NAME)
     .toArray();
+  const aggregates: { bookmarkIds?: string[] }[] = await db
+    .table(ALLBOOKMARK_DB_TABLE_NAME)
+    .toArray();
+  const referenced = new Set(
+    aggregates.flatMap((row) => row.bookmarkIds ?? []),
+  );
   const audit = async (bookmarkData: Bookmark) => {
-    const c = await db
-      .table(ALLBOOKMARK_DB_TABLE_NAME)
-      .where('bookmarkIds')
-      .anyOf(bookmarkData.id)
-      .count();
-    if (c > 0) {
+    if (referenced.has(bookmarkData.id)) {
       // found one, valid
     } else {
       logger(`bookmark ${bookmarkData.id} is an orphan, need to be purged.`);
@@ -24,6 +24,6 @@ export async function dbAuditor(logs: string[]): Promise<void> {
       logger(`bookmark ${bookmarkData.id} purged.`);
     }
   };
-  await Promise.all(map(bookmarksData, (bookmarkData) => audit(bookmarkData)));
+  await Promise.all(bookmarksData.map((bookmarkData) => audit(bookmarkData)));
   logger('bookmark dbAuditor finished processing.');
 }

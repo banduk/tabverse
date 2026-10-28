@@ -61,10 +61,15 @@ chrome.idle.onStateChanged.addListener(
       logger.info(
         'chrome is now idle or locked, will then perform db audit and clearance.',
       );
-      void lockVault().catch((err) =>
-        logger.error('Could not lock private vault', err),
-      );
-      dbAuditAndClearance();
+      void (async () => {
+        try {
+          if (await isVaultUnlocked()) {
+            await dbAuditAndClearance();
+          }
+        } finally {
+          await lockVault();
+        }
+      })().catch((err) => logger.error('Idle vault lock failed', err));
     }
   },
 );

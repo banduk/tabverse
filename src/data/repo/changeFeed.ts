@@ -39,6 +39,7 @@ import { SyncConfig, loadSyncConfig } from './syncConfig';
 import { notifyLocalTablesChanged } from './localTables';
 import { loadCloudConfig } from '../../cloud/config';
 import { recordCloudChange } from '../../cloud/journal';
+import { VaultStorageArea } from '../../vault/storage';
 
 export const WRITE_CREATE = 1;
 export const WRITE_UPDATE = 2;
@@ -93,7 +94,8 @@ export async function startChangeFeed(
     return;
   }
   changeFeedStarted = true;
-  const storage = options.storage || new ChromeStorageArea();
+  const storage =
+    options.storage || new VaultStorageArea(new ChromeStorageArea());
   const outbox = options.outbox || new Outbox(storage);
   const database = options.database || db;
 

@@ -23,6 +23,7 @@
  */
 import { logger } from '../global';
 import { ChromeStorageArea, type StorageAreaLike } from '../data/repo/outbox';
+import { VaultStorageArea } from '../vault/storage';
 
 export const PROMPT_LOG_KEY = 'tabverse_prompt_log_v1';
 
@@ -47,7 +48,7 @@ let storageOverride: StorageAreaLike | null = null;
 const listeners = new Set<() => void>();
 
 function storage(): StorageAreaLike {
-  return storageOverride ?? new ChromeStorageArea();
+  return storageOverride ?? new VaultStorageArea(new ChromeStorageArea());
 }
 
 export function setPromptLogStorageForTest(area: StorageAreaLike | null): void {

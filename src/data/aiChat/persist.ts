@@ -9,6 +9,7 @@
  */
 import { logger } from '../../global';
 import { ChromeStorageArea, type StorageAreaLike } from '../repo/outbox';
+import { VaultStorageArea } from '../../vault/storage';
 import { type ChatMessage, isChatMessage } from './AiChat';
 
 export const AI_CHAT_STORAGE_KEY = 'tabverse_ai_chat_v1';
@@ -19,7 +20,7 @@ export const CHAT_STORED_MESSAGES = 200;
 let storageOverride: StorageAreaLike | null = null;
 
 function storage(): StorageAreaLike {
-  return storageOverride ?? new ChromeStorageArea();
+  return storageOverride ?? new VaultStorageArea(new ChromeStorageArea());
 }
 
 export function setChatStorageForTest(area: StorageAreaLike | null): void {

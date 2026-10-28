@@ -14,6 +14,7 @@
  * in `chrome.storage.local`.
  */
 import { isTabSpaceManagerPage, logger } from '../../global';
+import { VaultStorageArea } from '../../vault/storage';
 import {
   ChromeStorageArea,
   MemoryStorageArea,
@@ -103,7 +104,7 @@ function localStorageArea(): StorageAreaLike {
   if (!anyChrome.storage?.local) {
     return new MemoryStorageArea();
   }
-  return new ChromeStorageArea();
+  return new VaultStorageArea(new ChromeStorageArea());
 }
 
 let localOverride: StorageAreaLike | null = null;

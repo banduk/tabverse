@@ -1,20 +1,20 @@
 import { Tab, TAB_DB_TABLE_NAME } from './Tab';
 import { TABSPACE_DB_TABLE_NAME } from './TabSpace';
 import { db } from '../../storage/db';
-import { map } from 'lodash';
 import { getLogger } from '../../storage/dbAuditorManager';
 
 export async function dbAuditor(logs: string[]): Promise<void> {
   const logger = getLogger(logs);
   logger('tabSpace dbAuditor start to process...');
   const tabsData = await db.table<Tab>(TAB_DB_TABLE_NAME).toArray();
+  // The multi-entry tabIds index is intentionally absent: it would disclose
+  // a plaintext list of workspace membership. Check decrypted aggregates.
+  const tabspaces: { tabIds?: string[] }[] = await db
+    .table(TABSPACE_DB_TABLE_NAME)
+    .toArray();
+  const referenced = new Set(tabspaces.flatMap((space) => space.tabIds ?? []));
   const auditTab = async (tabData: Tab) => {
-    const c = await db
-      .table(TABSPACE_DB_TABLE_NAME)
-      .where('tabIds')
-      .anyOf(tabData.id)
-      .count();
-    if (c > 0) {
+    if (referenced.has(tabData.id)) {
       // found one tabSpace, valid
     } else {
       logger(`tab ${tabData.id} is an orphan, need to be purged.`);
@@ -22,6 +22,6 @@ export async function dbAuditor(logs: string[]): Promise<void> {
       logger(`tab ${tabData.id} purged.`);
     }
   };
-  await Promise.all(map(tabsData, (tabData) => auditTab(tabData)));
+  await Promise.all(tabsData.map((tabData) => auditTab(tabData)));
   logger('tabSpace dbAuditor finished processing.');
 }

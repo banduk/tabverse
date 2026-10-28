@@ -39,3 +39,14 @@ schemas[ALLBOOKMARK_DB_TABLE_NAME] = ALLBOOKMARK_DB_SCHEMA;
 schemas[TAB_PREVIEW_DB_TABLE_NAME] = TAB_PREVIEW_DB_SCHEMA;
 schemas[CLOSED_TAB_DB_TABLE_NAME] = CLOSED_TAB_DB_SCHEMA;
 schemas[CLOUD_JOURNAL_TABLE] = CLOUD_JOURNAL_SCHEMA;
+
+// v13: sensitive fields are removed from native IndexedDB indexes.
+// Only opaque identities, relationships and timestamps remain queryable.
+schemas[TAB_DB_TABLE_NAME] = 'id, createdAt';
+schemas[TABSPACE_DB_TABLE_NAME] = 'id, windowId, createdAt';
+schemas[NOTE_DB_TABLE_NAME] = 'id, createdAt, tabSpaceId';
+schemas[TODO_DB_TABLE_NAME] = 'id, createdAt, tabSpaceId';
+schemas[BOOKMARK_DB_TABLE_NAME] = 'id, createdAt, tabSpaceId';
+schemas[ALLNOTE_DB_TABLE_NAME] = 'id, createdAt, tabSpaceId';
+schemas[ALLTODO_DB_TABLE_NAME] = 'id, createdAt, tabSpaceId';
+schemas[ALLBOOKMARK_DB_TABLE_NAME] = 'id, createdAt, tabSpaceId';

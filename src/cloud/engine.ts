@@ -24,6 +24,7 @@ import {
 import { localTombstones, rememberRemoteDeletion } from './journal';
 import { listLocalRecords, applyServerRecords } from '../data/repo/dbBridge';
 import { runAsRemoteApply } from '../data/repo/changeFeed';
+import { vaultKey } from '../vault/keyring';
 import { type SyncRecord } from '../data/repo/types';
 
 export interface CloudSyncResult {
@@ -154,6 +155,8 @@ export async function syncPrivateCloud(): Promise<CloudSyncResult> {
           'Sync is locked. Unlock in Settings after restarting Chrome.',
         );
       }
+      // Never contact cloud providers while local plaintext is inaccessible.
+      await vaultKey();
       const provider = await getProvider(config, session);
       const outcome = await doSync(config, session, provider);
       await chrome.storage.local.set({

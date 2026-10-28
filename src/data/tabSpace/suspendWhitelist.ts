@@ -37,6 +37,7 @@ import {
   type StorageAreaLike,
 } from '../../data/repo/outbox';
 import type { Tab } from './Tab';
+import { VaultStorageArea } from '../../vault/storage';
 
 export const SUSPEND_WHITELIST_KEY = 'tabverse_suspend_whitelist_v2';
 export const SUSPEND_WHITELIST_SESSION_PREFIX =
@@ -58,7 +59,7 @@ let sessionOverride: SessionAreaLike | null = null;
 const listeners = new Set<() => void>();
 
 function storage(): StorageAreaLike {
-  return storageOverride ?? new ChromeStorageArea();
+  return storageOverride ?? new VaultStorageArea(new ChromeStorageArea());
 }
 
 function sessionArea(): SessionAreaLike | null {

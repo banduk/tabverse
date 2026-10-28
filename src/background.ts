@@ -3,6 +3,7 @@ import { dbAuditor as closedTabDbAuditor } from './data/closedTab/dbAuditor';
 import { logger } from './global';
 import { startChangeFeed } from './data/repo/changeFeed';
 import { syncPrivateCloud } from './cloud/engine';
+import { isVaultUnlocked, lockVault } from './vault/keyring';
 import { dbAuditor as noteDbAuditor } from './data/note/dbAuditor';
 import { dbAuditor as tabSpaceDbAuditor } from './data/tabSpace/dbAuditor';
 import { dbAuditor as todoDbAuditor } from './data/todo/dbAuditor';
@@ -29,6 +30,13 @@ import {
 
 setDebugLogLevel(TabSpaceLogLevel.LOG);
 
+// Minimize exposure of persistent extension data to untrusted content scripts.
+void chrome.storage.local
+  .setAccessLevel({ accessLevel: 'TRUSTED_CONTEXTS' })
+  .catch((err) => logger.error('Cannot restrict local storage access', err));
+// Idle-lock timeout (not the browser's short default interval).
+chrome.idle.setDetectionInterval(15 * 60);
+
 chrome.runtime.onInstalled.addListener(() => {
   chrome.tabs.query({ active: true }, (tabs) => {
     tabs[0] && chrome.tabs.reload(tabs[0].id);
@@ -53,13 +61,23 @@ chrome.idle.onStateChanged.addListener(
       logger.info(
         'chrome is now idle or locked, will then perform db audit and clearance.',
       );
-      dbAuditAndClearance();
+      void (async () => {
+        try {
+          if (await isVaultUnlocked()) {
+            await dbAuditAndClearance();
+          }
+        } finally {
+          await lockVault();
+        }
+      })().catch((err) => logger.error('Idle vault lock failed', err));
     }
   },
 );
 
 // Cloud sync is opt-in, encrypted and limited to the selected personal account.
-void startChangeFeed();
+void isVaultUnlocked().then((open) => {
+  if (open) void startChangeFeed();
+});
 const CLOUD_SYNC_ALARM = 'tabverse_personal_cloud_sync';
 void chrome.alarms
   .get(CLOUD_SYNC_ALARM)
@@ -77,6 +95,10 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'tabverse_vault_unlocked') {
+    void startChangeFeed();
+    return false;
+  }
   if (message?.type !== 'tabverse_personal_cloud_sync_now') return false;
   void syncPrivateCloud()
     .then((result) => sendResponse({ ok: true, result }))

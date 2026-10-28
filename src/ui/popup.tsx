@@ -12,8 +12,29 @@ import React from 'react';
 import { PopupView } from './popup/PopupView';
 import { renderPage } from './common/base';
 import { setDebugLogLevel, TabSpaceLogLevel } from '../debug';
+import { isVaultUnlocked } from '../vault/keyring';
 
 setDebugLogLevel(TabSpaceLogLevel.LOG);
 console.info('Tabverse popup');
 
-renderPage({ pageComponent: <PopupView /> });
+void isVaultUnlocked().then((unlocked) => {
+  renderPage({
+    pageComponent: unlocked ? (
+      <PopupView />
+    ) : (
+      <div role="status" style={{ padding: '16px' }}>
+        Local vault is locked. Open the Tabverse manager to unlock it.
+        <button
+          type="button"
+          onClick={() =>
+            void chrome.tabs.create({
+              url: chrome.runtime.getURL('manager.html?op=new'),
+            })
+          }
+        >
+          Open manager
+        </button>
+      </div>
+    ),
+  });
+});

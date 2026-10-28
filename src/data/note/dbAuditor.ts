@@ -1,7 +1,6 @@
 import { Note, NOTE_DB_TABLE_NAME } from './Note';
 
 import { db } from '../../storage/db';
-import { map } from 'lodash';
 import { ALLNOTE_DB_TABLE_NAME } from './AllNote';
 import { getLogger } from '../../storage/dbAuditorManager';
 
@@ -9,13 +8,12 @@ export async function dbAuditor(logs: string[]): Promise<void> {
   const logger = getLogger(logs);
   logger('note dbAuditor start to process...');
   const notesData = await db.table<Note>(NOTE_DB_TABLE_NAME).toArray();
+  const aggregates: { noteIds?: string[] }[] = await db
+    .table(ALLNOTE_DB_TABLE_NAME)
+    .toArray();
+  const referenced = new Set(aggregates.flatMap((row) => row.noteIds ?? []));
   const audit = async (noteData: Note) => {
-    const c = await db
-      .table(ALLNOTE_DB_TABLE_NAME)
-      .where('noteIds')
-      .anyOf(noteData.id)
-      .count();
-    if (c > 0) {
+    if (referenced.has(noteData.id)) {
       // found one, valid
     } else {
       logger(`note ${noteData.id} is an orphan, need to be purged.`);
@@ -23,6 +21,6 @@ export async function dbAuditor(logs: string[]): Promise<void> {
       logger(`note ${noteData.id} purged.`);
     }
   };
-  await Promise.all(map(notesData, (noteData) => audit(noteData)));
+  await Promise.all(notesData.map((noteData) => audit(noteData)));
   logger('note dbAuditor finished processing.');
 }

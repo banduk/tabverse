@@ -1,0 +1,55 @@
+name: Vault real-browser E2E
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/vault/**'
+      - 'src/storage/**'
+      - 'src/ui/manager.tsx'
+      - 'src/background.ts'
+      - 'tools/e2e_local_vault.py'
+      - '.github/workflows/vault-e2e.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium-vault-e2e:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install extension dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build the installable Chrome extension ZIP
+        run: pnpm run build-store
+      - name: Install extension-capable Chromium
+        run: |
+          python -m pip install playwright==1.58.0
+          python -m playwright install --with-deps chromium
+      - name: Exercise the packaged extension in real Chromium
+        env:
+          TABVERSE_EXTENSION_DIR: .vault-e2e-zip/tabverse
+        run: |
+          mkdir -p .vault-e2e-zip
+          unzip -q dist_store/tabverse.zip -d .vault-e2e-zip
+          test -f .vault-e2e-zip/tabverse/manifest.json
+          test -f .vault-e2e-zip/tabverse/LICENSE.txt
+          python tools/e2e_local_vault.py
+      - name: Save E2E report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vault-real-browser-e2e
+          path: vault-e2e-results/
+          retention-days: 14

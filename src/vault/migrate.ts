@@ -30,7 +30,9 @@ export async function migrateLocalVault(): Promise<void> {
 }
 
 /** Can run against a test database; normal app uses the shared Dexie handle. */
-export async function encryptLegacyDatabaseRows(database: Dexie): Promise<void> {
+export async function encryptLegacyDatabaseRows(
+  database: Dexie,
+): Promise<void> {
   await vaultKey();
   allowLegacyVaultRecords(true);
   try {

@@ -37,6 +37,8 @@ import { Outbox } from './outbox';
 import { RecordInput } from './types';
 import { SyncConfig, loadSyncConfig } from './syncConfig';
 import { notifyLocalTablesChanged } from './localTables';
+import { loadCloudConfig } from '../../cloud/config';
+import { recordCloudChange } from '../../cloud/journal';
 
 export const WRITE_CREATE = 1;
 export const WRITE_UPDATE = 2;
@@ -189,6 +191,18 @@ export async function handleChanges(
   if (remoteApplyDepth > 0) {
     return;
   }
+  // Record edits and deletions durably before relying on a cloud snapshot.
+  // One IndexedDB row per record avoids cross-window chrome.storage races.
+  const cloud = await loadCloudConfig().catch(() => null);
+  if (cloud) {
+    for (const change of changes) {
+      const entity = entityForTable(change.table);
+      if (!entity) continue;
+      const record = toRecordInput(entity, change);
+      if (record) await recordCloudChange(record);
+    }
+  }
+
   let config: SyncConfig | null;
   try {
     config = await loadSyncConfig(storage);

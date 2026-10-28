@@ -22,6 +22,7 @@ import { AiSettingsPanel } from './AiSettingsPanel';
 import { AppearanceSettingsPanel } from './AppearanceSettingsPanel';
 import { DedupSettingsPanel } from './DedupSettingsPanel';
 import { SuspendSettingsPanel } from './SuspendSettingsPanel';
+import { CloudSyncPanel } from '../../cloud/CloudSyncPanel';
 import classes from './SettingsDialog.module.scss';
 
 export type SettingsTab =
@@ -63,12 +64,7 @@ export function SettingsBody(props: SettingsBodyProps) {
               <Icon icon="refresh" /> {t('settingsTabSync')}
             </span>
           }
-          panel={
-            <p>
-              Private build: external synchronization is disabled. Your data
-              stays on this device.
-            </p>
-          }
+          panel={<CloudSyncPanel />}
         />
         <Tab
           id="suspend"

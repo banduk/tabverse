@@ -24,6 +24,11 @@ import {
   CLOSED_TAB_DB_TABLE_NAME,
 } from '../data/closedTab/ClosedTab';
 
+import {
+  CLOUD_JOURNAL_SCHEMA,
+  CLOUD_JOURNAL_TABLE,
+} from '../cloud/constants';
+
 export const schemas = {};
 
 schemas[TAB_DB_TABLE_NAME] = TAB_DB_SCHEMA;
@@ -36,3 +41,4 @@ schemas[BOOKMARK_DB_TABLE_NAME] = BOOKMARK_DB_SCHEMA;
 schemas[ALLBOOKMARK_DB_TABLE_NAME] = ALLBOOKMARK_DB_SCHEMA;
 schemas[TAB_PREVIEW_DB_TABLE_NAME] = TAB_PREVIEW_DB_SCHEMA;
 schemas[CLOSED_TAB_DB_TABLE_NAME] = CLOSED_TAB_DB_SCHEMA;
+schemas[CLOUD_JOURNAL_TABLE] = CLOUD_JOURNAL_SCHEMA;

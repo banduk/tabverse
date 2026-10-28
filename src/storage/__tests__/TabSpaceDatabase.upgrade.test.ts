@@ -24,7 +24,9 @@ const DB_NAME = `TabSpaceDB-${TAG}`;
 
 // what v7 declared: the current stores plus the session snapshots
 const V7_SCHEMAS: { [name: string]: string } = {
-  ...schemas,
+  ...Object.fromEntries(
+    Object.entries(schemas).filter(([name]) => name !== 'SavedCloudJournal'),
+  ),
   ChromeSession: 'id, tag, createdAt, updatedAt',
 };
 
@@ -65,7 +67,9 @@ function createV7Database(): Promise<void> {
  * to record which browser run wrote a row (data/tabSpace/previewSession).
  */
 const V10_SCHEMAS: { [name: string]: string } = {
-  ...schemas,
+  ...Object.fromEntries(
+    Object.entries(schemas).filter(([name]) => name !== 'SavedCloudJournal'),
+  ),
   SavedTabPreview: 'id, capturedAt',
 };
 

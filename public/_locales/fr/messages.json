@@ -558,7 +558,7 @@
     "message": " ($1). Se reconnecter remplace cette configuration."
   },
   "syncOfficialModeTitle": {
-    "message": "Connectez-vous sur tabversed.liyu1981.xyz et autorisez cet appareil"
+    "message": "Connectez-vous sur Tabverse Private (offline) et autorisez cet appareil"
   },
   "syncCustomModeTitle": {
     "message": "Un serveur tabversed que vous tournez vous-même, appairé avec un code"

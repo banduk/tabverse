@@ -1,3 +1,4 @@
+import { offlineFaviconSrc } from '../common/offlineFavicon';
 import { t } from '../../i18n';
 import { $allBookmark, bookmarkStoreApi } from '../../data/bookmark/store';
 import { Button, ButtonGroup, EditableText } from '@blueprintjs/core';
@@ -26,7 +27,7 @@ const BookmarkItem = (props: IBookmarkItem) => {
           <img
             alt=""
             aria-hidden={true}
-            src={props.bookmark.favIconUrl}
+            src={offlineFaviconSrc(props.bookmark.favIconUrl)}
             width="32"
             height="32"
           />

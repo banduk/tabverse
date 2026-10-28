@@ -27,21 +27,19 @@ import React from 'react';
 import { useSettingItem } from '../../../storage/localSetting';
 import { t, type MessageKey } from '../../../i18n';
 import { PromptHistoryPanel } from './PromptHistoryPanel';
-import { ServerConsoleView } from './ServerConsolePanel';
 import classes from './RightSidePanel.module.scss';
 
-export type RightPanelView = 'ai' | 'server';
+export type RightPanelView = 'ai';
 
 /** Remembered across reloads: which panel is open ('' = the rail). */
 const PANEL_SETTING = 'tabverse_right_panel';
 
 const VIEWS: { id: RightPanelView; icon: IconName; label: MessageKey }[] = [
   { id: 'ai', icon: 'chat', label: 'rightPanelAiHistory' },
-  { id: 'server', icon: 'cloud-server', label: 'rightPanelServerConsole' },
 ];
 
 function isRightPanelView(value: string): value is RightPanelView {
-  return value === 'ai' || value === 'server';
+  return value === 'ai';
 }
 
 export interface RightSidePanelShellProps {
@@ -111,7 +109,7 @@ export function RightSidePanelShell(props: RightSidePanelShellProps) {
         />
       </header>
       <div className={classes.body}>
-        {view === 'server' ? <ServerConsoleView /> : <PromptHistoryPanel />}
+        <PromptHistoryPanel />
       </div>
     </aside>
   );

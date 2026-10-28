@@ -3,7 +3,6 @@
   "manifest_version": 3,
   "minimum_chrome_version": "140",
   "description": "__MSG_extDescription__",
-  "homepage_url": "https://tabverse.github.io",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -32,11 +31,12 @@
     "idle",
     "alarms"
   ],
-  "host_permissions": ["<all_urls>"],
-  "externally_connectable": {
-    "matches": ["https://tabversed.liyu1981.xyz/*"]
-  },
+  "host_permissions": [],
   "content_security_policy": {
-    "extension_pages": "default-src 'self'; script-src 'self'; connect-src 'self' https: wss: http: ws:; img-src * data: blob:; frame-src 'self' http: https:; object-src 'self'"
-  }
+    "extension_pages": "default-src 'self'; script-src 'self'; connect-src 'self'; img-src 'self' data: blob:; frame-src 'none'; object-src 'none'"
+  },
+  "optional_host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
 }

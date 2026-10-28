@@ -42,7 +42,7 @@ describe('SettingsBody', () => {
     const markup = body('sync');
     // the sync panel's loading row (it reads its state in an effect, which a
     // static render does not run)
-    expect(markup).toContain('bp6-spinner');
+    expect(markup).toContain('external synchronization is disabled');
     expect(markup).not.toContain('Created in Sydney');
   });
 
@@ -53,11 +53,10 @@ describe('SettingsBody', () => {
     expect(markup).not.toContain('bp6-spinner');
   });
 
-  test('About links to the site, the repository and the community', () => {
+  test('About does not navigate to upstream sites', () => {
     const markup = body('about');
-    expect(markup).toContain('https://liyu1981.github.io/tabverse/');
-    expect(markup).toContain('https://github.com/liyu1981/tabverse');
-    expect(markup).toContain('https://www.reddit.com/r/tabverse/');
+    expect(markup).toContain('Private offline build');
+    expect(markup).not.toContain('https://');
   });
 });
 

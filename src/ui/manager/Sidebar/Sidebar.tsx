@@ -9,7 +9,6 @@ import React from 'react';
 import { OtherTabSpaces } from './OtherTabSpaces';
 import { SavedTabSpace } from './SavedTabSpace';
 import { TabSpaceLogo } from '../../common/TabSpaceLogo';
-import { useServerSyncConfigured } from './useServerSyncConfigured';
 import { useSidebarCollapsed } from '../../common/SidebarContainer';
 import { $tabSpace } from '../../../data/tabSpace/store';
 import { useStore } from 'effector-react';
@@ -153,7 +152,7 @@ const RAIL_ICON_SIZE = 26;
 
 export const Sidebar = (props: ISidebarProps) => {
   const tabSpace = useStore($tabSpace);
-  const serverSync = useServerSyncConfigured();
+  const serverSync = false; // No remote search in private build.
   // the rail has no room for a name, so the current tabverse's own name is the
   // tooltip; before the bootstrap write lands there is no name yet
   const currentLabel =

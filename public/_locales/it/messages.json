@@ -558,7 +558,7 @@
     "message": " ($1). Connecting again replaces this setup."
   },
   "syncOfficialModeTitle": {
-    "message": "Sign in on tabversed.liyu1981.xyz and allow this device"
+    "message": "Sign in on Tabverse Private (offline) and allow this device"
   },
   "syncCustomModeTitle": {
     "message": "A tabversed server you run yourself, paired with a code"

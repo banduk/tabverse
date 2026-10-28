@@ -175,7 +175,7 @@ test('the record`s own facts sit on the title row, as the extension`s control do
  */
 test('a tab without an icon gets the extension`s placeholder, which is remote', () => {
   const html = renderToStaticMarkup(<TabverseTabs bundle={bundle()} />);
-  expect(html).toContain('dummyimage.com');
+  expect(html).not.toContain('dummyimage.com');
 });
 
 // Reported as: a tabverse with a split and a split inside a group shows every

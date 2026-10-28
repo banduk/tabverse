@@ -27,28 +27,7 @@ export function AboutPanel() {
         </p>
         <p className={classes.aboutText2}>{t('aboutCreatedIn')}</p>
         <p className={classes.aboutText2}>
-          <a
-            className={classes.aboutTextLink}
-            href="https://liyu1981.github.io/tabverse/"
-          >
-            {t('aboutWebsite')}
-          </a>{' '}
-          |{' '}
-          <a
-            className={classes.aboutTextLink}
-            href="https://github.com/liyu1981/tabverse"
-          >
-            {t('aboutGithub')}
-          </a>{' '}
-          |{' '}
-          {/* The subreddit is where support and discussion happen; the
-              repository is for code and issues. */}
-          <a
-            className={classes.aboutTextLink}
-            href="https://www.reddit.com/r/tabverse/"
-          >
-            {t('aboutReddit')}
-          </a>
+          Private offline build. No third-party background connections.
         </p>
       </div>
     </div>

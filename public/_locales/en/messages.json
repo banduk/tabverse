@@ -744,7 +744,7 @@
     "description": "Sync setup: text after the server URL when already connected. $1 is which kind of server it is."
   },
   "syncOfficialModeTitle": {
-    "message": "Sign in on tabversed.liyu1981.xyz and allow this device",
+    "message": "Sign in on Tabverse Private (offline) and allow this device",
     "description": "Sync setup: the official-mode button's tooltip."
   },
   "syncCustomModeTitle": {

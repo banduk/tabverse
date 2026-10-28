@@ -1,6 +1,7 @@
 import { beforeEach, expect, test } from 'vitest';
 import {
   createVault,
+  changeVaultPassphrase,
   isVaultUnlocked,
   lockVault,
   readVaultMetadata,
@@ -93,4 +94,19 @@ test('encrypted Chrome storage has no plaintext and decrypts after unlock', asyn
     (await protectedArea.get(['tabverse_ai_chat_v1'])).tabverse_ai_chat_v1[0]
       .content,
   ).toBe('internal confidential meeting');
+});
+
+test('changes the passphrase by rewrapping the data key', async () => {
+  await createVault('an initial long passphrase');
+  const sealed = await sealJson({ value: 'highly private' }, 'record');
+  await changeVaultPassphrase(
+    'an initial long passphrase',
+    'a newer long passphrase',
+  );
+  await lockVault();
+  await expect(unlockVault('an initial long passphrase')).rejects.toThrow();
+  await unlockVault('a newer long passphrase');
+  await expect(unsealJson(sealed, 'record')).resolves.toEqual({
+    value: 'highly private',
+  });
 });

@@ -140,6 +140,37 @@ export async function vaultKey(): Promise<CryptoKey> {
   return cached;
 }
 
+export async function changeVaultPassphrase(
+  oldPassphrase: string,
+  newPassphrase: string,
+): Promise<void> {
+  if (newPassphrase.length < 12) {
+    throw new Error('New passphrase must have at least 12 characters.');
+  }
+  const oldMeta = await readVaultMetadata();
+  if (!oldMeta) throw new Error('Vault is not initialized.');
+  await unlockVault(oldPassphrase);
+  const item = await chrome.storage.session.get(VAULT_SESSION_KEY);
+  const key = fromBase64(item[VAULT_SESSION_KEY]);
+  if (key.length !== 32) throw new VaultLockedError();
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const newKek = await passwordKey(newPassphrase, salt);
+  const wrapped = await crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv: new Uint8Array(iv) },
+    newKek,
+    new Uint8Array(key),
+  );
+  await chrome.storage.local.set({
+    [VAULT_META_KEY]: {
+      ...oldMeta,
+      salt: toBase64(salt),
+      iv: toBase64(iv),
+      wrapped: toBase64(new Uint8Array(wrapped)),
+    },
+  });
+}
+
 export async function isVaultUnlocked(): Promise<boolean> {
   try {
     await vaultKey();

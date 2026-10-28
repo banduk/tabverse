@@ -243,8 +243,14 @@ export function applyVaultMiddleware(db: Dexie): void {
                     : compareIndexedKeys(rows[position].key, key) < 0) ||
                     (compareIndexedKeys(rows[position].key, key) === 0 &&
                       (request.reverse
-                        ? compareIndexedKeys(rows[position].primaryKey, primaryKey) > 0
-                        : compareIndexedKeys(rows[position].primaryKey, primaryKey) < 0)))
+                        ? compareIndexedKeys(
+                            rows[position].primaryKey,
+                            primaryKey,
+                          ) > 0
+                        : compareIndexedKeys(
+                            rows[position].primaryKey,
+                            primaryKey,
+                          ) < 0)))
                 ) {
                   position += 1;
                 }

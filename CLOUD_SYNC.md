@@ -27,6 +27,11 @@ the upstream Tabverse server.
    OAuth 2.0 client with the installed extension ID from chrome://extensions.
    Keep a stable extension ID in your unpacked installation and configure
    OAuth consent screen and test users when needed.
+   For reproducible builds on different computers, configure the PUBLIC key
+   of your extension as GitHub Actions Repository Variable
+   TABVERSE_EXTENSION_PUBLIC_KEY (base64 DER). Never upload its private PEM key.
+   Without a stable key, unpacking at another filesystem path can change the
+   extension ID and invalidate the Chrome OAuth client registration.
 2. Set GitHub Actions Repository Variable TABVERSE_GOOGLE_CLIENT_ID to your
    OAuth client ID (public, not a secret) and re-run CI, or build locally:
 

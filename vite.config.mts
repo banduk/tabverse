@@ -29,6 +29,13 @@ function extensionManifest(): Plugin {
         readFileSync(fromRoot('src/manifest.json'), 'utf-8'),
       );
       manifest.version = pkg.version;
+      const extensionPublicKey = process.env.TABVERSE_EXTENSION_PUBLIC_KEY;
+      if (extensionPublicKey) {
+        if (!/^[A-Za-z0-9+/]+={0,2}$/.test(extensionPublicKey)) {
+          this.error('TABVERSE_EXTENSION_PUBLIC_KEY must be base64 DER');
+        }
+        manifest.key = extensionPublicKey;
+      }
       const googleClientId = process.env.TABVERSE_GOOGLE_CLIENT_ID;
       if (googleClientId) {
         if (

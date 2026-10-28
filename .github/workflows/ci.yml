@@ -42,6 +42,7 @@ jobs:
       - name: production build
         env:
           TABVERSE_GOOGLE_CLIENT_ID: ${{ vars.TABVERSE_GOOGLE_CLIENT_ID }}
+          TABVERSE_EXTENSION_PUBLIC_KEY: ${{ vars.TABVERSE_EXTENSION_PUBLIC_KEY }}
         run: pnpm run build
 
       - name: assert private network policy
@@ -77,6 +78,7 @@ jobs:
         # Chrome blocks installing an off-store .crx.
         env:
           TABVERSE_GOOGLE_CLIENT_ID: ${{ vars.TABVERSE_GOOGLE_CLIENT_ID }}
+          TABVERSE_EXTENSION_PUBLIC_KEY: ${{ vars.TABVERSE_EXTENSION_PUBLIC_KEY }}
         run: pnpm run build-store
 
       - name: archive store package

@@ -32,3 +32,13 @@ node tools/check-private-build.mjs
 ```
 
 The static policy verifier does not constitute a dynamic penetration test. For confidential work content, also inspect the generated browser extension package and live network traffic in a dedicated Chrome profile.
+
+## CI policy
+
+The Chrome extension is the deliverable for this fork. The default CI therefore
+runs only `extension` (lint/typecheck/unit tests/build/privacy policy) and
+`package` (installable ZIP). The upstream Go server and official-site jobs are
+not on the critical path; their source remains in the repository but is not
+compiled, deployed, or automatically released in this fork.
+
+The workflow runs on privacy/feature branches to support stacked pull requests.

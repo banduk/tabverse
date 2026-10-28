@@ -4,6 +4,10 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
+const bundledLicense = readFileSync('dist/LICENSE.txt', 'utf8');
+assert.ok(bundledLicense.includes('Copyright (c) 2021 Tabverse'));
+assert.ok(bundledLicense.includes('MIT License'));
+
 const manifest = JSON.parse(readFileSync('dist/manifest.json', 'utf8'));
 const csp = manifest.content_security_policy.extension_pages;
 assert.deepEqual(manifest.host_permissions ?? [], []);

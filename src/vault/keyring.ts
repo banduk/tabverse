@@ -151,7 +151,9 @@ export async function changeVaultPassphrase(
   if (!oldMeta) throw new Error('Vault is not initialized.');
   await unlockVault(oldPassphrase);
   const item = await chrome.storage.session.get(VAULT_SESSION_KEY);
-  const key = fromBase64(item[VAULT_SESSION_KEY]);
+  const encoded = item[VAULT_SESSION_KEY];
+  if (typeof encoded !== 'string') throw new VaultLockedError();
+  const key = fromBase64(encoded);
   if (key.length !== 32) throw new VaultLockedError();
   const salt = crypto.getRandomValues(new Uint8Array(16));
   const iv = crypto.getRandomValues(new Uint8Array(12));

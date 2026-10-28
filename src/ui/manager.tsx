@@ -35,6 +35,7 @@ import { startChangeFeed } from '../data/repo/changeFeed';
 import { isVaultUnlocked, readVaultMetadata } from '../vault/keyring';
 import { migrateLocalVault } from '../vault/migrate';
 import { VaultUnlock } from '../vault/VaultUnlock';
+import { VAULT_SESSION_KEY } from '../vault/keyring';
 
 async function bootstrap() {
   const thisChromeTab = await chrome.tabs.getCurrent();
@@ -109,6 +110,16 @@ async function protectedBootstrap() {
   await migrateLocalVault();
   await bootstrap();
 }
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (
+    areaName === 'session' &&
+    changes[VAULT_SESSION_KEY] &&
+    !changes[VAULT_SESSION_KEY].newValue
+  ) {
+    window.location.reload();
+  }
+});
 
 void protectedBootstrap().catch((err) => {
   logger.error('Failed to unlock or migrate the local vault:', err);

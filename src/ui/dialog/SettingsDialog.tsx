@@ -23,10 +23,12 @@ import { AppearanceSettingsPanel } from './AppearanceSettingsPanel';
 import { DedupSettingsPanel } from './DedupSettingsPanel';
 import { SuspendSettingsPanel } from './SuspendSettingsPanel';
 import { CloudSyncPanel } from '../../cloud/CloudSyncPanel';
+import { VaultSettingsPanel } from '../../vault/VaultSettingsPanel';
 import classes from './SettingsDialog.module.scss';
 
 export type SettingsTab =
   | 'sync'
+  | 'vault'
   | 'suspend'
   | 'dedup'
   | 'look'
@@ -57,6 +59,15 @@ export function SettingsBody(props: SettingsBodyProps) {
         selectedTabId={props.tab}
         onChange={(next) => props.onSelectTab(next as SettingsTab)}
       >
+        <Tab
+          id="vault"
+          title={
+            <span>
+              <Icon icon="lock" /> Local Vault
+            </span>
+          }
+          panel={<VaultSettingsPanel />}
+        />
         <Tab
           id="sync"
           title={

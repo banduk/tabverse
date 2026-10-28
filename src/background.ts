@@ -3,7 +3,7 @@ import { dbAuditor as closedTabDbAuditor } from './data/closedTab/dbAuditor';
 import { logger } from './global';
 import { startChangeFeed } from './data/repo/changeFeed';
 import { syncPrivateCloud } from './cloud/engine';
-import { isVaultUnlocked } from './vault/keyring';
+import { isVaultUnlocked, lockVault } from './vault/keyring';
 import { dbAuditor as noteDbAuditor } from './data/note/dbAuditor';
 import { dbAuditor as tabSpaceDbAuditor } from './data/tabSpace/dbAuditor';
 import { dbAuditor as todoDbAuditor } from './data/todo/dbAuditor';
@@ -53,6 +53,9 @@ chrome.idle.onStateChanged.addListener(
     if (newState === 'idle' || newState === 'locked') {
       logger.info(
         'chrome is now idle or locked, will then perform db audit and clearance.',
+      );
+      void lockVault().catch((err) =>
+        logger.error('Could not lock private vault', err),
       );
       dbAuditAndClearance();
     }

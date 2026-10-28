@@ -61,3 +61,45 @@ GitHub Actions workflow **UI prototype screenshots** also renders all four and u
 ## Decision
 
 **Choose A or B**. Then evolve PR #4 from design mockups into production code. Keep it in Draft until the selected UI is implemented and full E2E accessibility/security checks pass.
+
+
+## Decision adopted — hybrid Chrome UI (2026-10-28)
+
+The accepted design combines **A's full-manager layout** (left navigation,
+central workspace list, right tools inspector) with **B's restrained Chrome
+visual styling**. It also keeps **B's actual browser-owned Side Panel** as a
+separate, compact entry point. The panel is not a cramped copy of the manager.
+
+### Production implementation in this PR
+
+- Toolbar action now toggles the real Chrome side panel with
+  `chrome.sidePanel.setPanelBehavior({openPanelOnActionClick: true})`.
+- Side panel lists current-window tabs, Chrome tab groups and recent saved
+  workspaces. Search filters both lists. Clicking an active tab focuses it;
+  opening a saved workspace reuses an existing window or creates a new one,
+  rather than replacing unrelated tabs.
+- Vault setup/unlock precedes access to saved spaces. The side panel stops
+  displaying sensitive data when session keys are removed.
+- Full manager keeps existing tab/group/notes/todos/bookmarks/history/AI
+  functionality. Its layout is now a 244px neutral navigation rail, flexible
+  list and 340px details inspector (responsive at smaller widths).
+- Chrome-like design tokens, compact rows, flat borders, quiet tabs and
+  light/dark contrast are applied without untrusted external styles/scripts.
+- The old `popup.html` remains in the package as a legacy standalone page,
+  but the toolbar action uses the native side panel.
+
+### QA required before merging
+
+1. Use a **secondary Chrome profile** and load the unpacked extension.
+2. Click the extension's toolbar icon; check that it opens/closes Chrome's
+   real side panel and keeps working when switching tabs and windows.
+3. Test an empty vault, unlocking, idle locking, and the locked panel state.
+4. Verify all current Chrome groups, tab focus, saved-workspace restoration
+   and the manager link, including a workspace already open elsewhere.
+5. Verify full manager tabs/groups, drag/drop, split-view, settings, notes,
+   tasks, bookmarks, history and AI; test light/dark appearance and keyboard.
+6. Review network inspector for unexpected outbound traffic and run the
+   packaged-extension tests. Do not merge until CI and manual tests pass.
+
+The browser-frame imagery in the static design prototype remains illustrative,
+not a screenshot of live extension behavior.

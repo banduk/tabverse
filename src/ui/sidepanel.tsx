@@ -1,4 +1,7 @@
 import 'normalize.css';
+import '@blueprintjs/core/lib/css/blueprint.css';
+import '@blueprintjs/icons/lib/css/blueprint-icons.css';
+import './theme.scss';
 import './sidepanel/sidepanel.scss';
 
 import React from 'react';

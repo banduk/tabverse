@@ -20,6 +20,16 @@ function normalized(value: string): string {
   return value.toLocaleLowerCase().trim();
 }
 
+function hostOf(url: string | undefined): string {
+  if (!url) return 'Chrome';
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname || parsed.protocol.replace(':', '') || 'Chrome';
+  } catch {
+    return 'Chrome';
+  }
+}
+
 export function SidePanelView() {
   const [windowId, setWindowId] = useState<number | null>(null);
   const [tabs, setTabs] = useState<chrome.tabs.Tab[]>([]);
@@ -163,7 +173,7 @@ export function SidePanelView() {
       } else {
         await chrome.tabs.create({
           windowId,
-          url: tabverseUrl(TabSpaceOp.New),
+          url: chrome.runtime.getURL(tabverseUrl(TabSpaceOp.New)),
           active: true,
         });
       }
@@ -182,7 +192,7 @@ export function SidePanelView() {
       } else {
         // A saved workspace gets its own window: never replace the user's current work.
         await chrome.windows.create({
-          url: tabverseUrl(TabSpaceOp.LoadSaved, space.id),
+          url: chrome.runtime.getURL(tabverseUrl(TabSpaceOp.LoadSaved, space.id)),
         });
       }
     } catch (reason) {
@@ -323,7 +333,7 @@ export function SidePanelView() {
                       <span className="tv-side-row-text">
                         <strong>{tab.title || 'Nova aba'}</strong>
                         <small>
-                          {tab.url ? new URL(tab.url).hostname : 'Chrome'}
+                          {tab.url ? hostOf(tab.url) : 'Chrome'}
                         </small>
                       </span>
                       {tab.pinned ? (

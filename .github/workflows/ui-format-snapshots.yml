@@ -1,0 +1,31 @@
+name: UI format snapshots (temporary validation)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/ui-format-snapshots.yml'
+      - 'src/ui/**'
+      - 'src/manifest.json'
+permissions:
+  contents: read
+jobs:
+  format-snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Print formatted source
+        shell: bash
+        run: |
+          pnpm exec biome format --write src/manifest.json src/ui/common/TabSpaceLogo.tsx src/ui/sidepanel/SidePanelView.tsx
+          for f in src/manifest.json src/ui/common/TabSpaceLogo.tsx src/ui/sidepanel/SidePanelView.tsx; do
+            printf 'FORMATTED_FILE_START:%s\n' "$f"
+            base64 -w0 "$f"
+            printf '\nFORMATTED_FILE_END:%s\n' "$f"
+          done

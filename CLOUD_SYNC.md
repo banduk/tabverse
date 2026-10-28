@@ -27,9 +27,13 @@ the upstream Tabverse server.
    OAuth 2.0 client with the installed extension ID from chrome://extensions.
    Keep a stable extension ID in your unpacked installation and configure
    OAuth consent screen and test users when needed.
-2. Build with the public OAuth client ID:
+2. Set GitHub Actions Repository Variable TABVERSE_GOOGLE_CLIENT_ID to your
+   OAuth client ID (public, not a secret) and re-run CI, or build locally:
 
    TABVERSE_GOOGLE_CLIENT_ID=...apps.googleusercontent.com pnpm run build
+
+   Download the rebuilt ZIP from Actions. The default CI artifact (without
+   that variable) will not support Google sign-in.
 
 3. Go to Settings > Sync > Google Drive, enter a long passphrase and press
    Connect and sync. Google will ask you to authorize appDataFolder access.
@@ -71,7 +75,8 @@ https://docs.github.com/en/rest/repos/contents
 ## Browser downgrade
 
 This feature raises the IndexedDB schema from v11 to v12 for durable
-cross-device deletion tombstones. Downgrading to a v11 Tabverse build can succeed, but Dexie may silently
+cross-device deletion tombstones. Downgrading to a v11 Tabverse build can
+succeed, but Dexie may silently
 drop the v12-only deletion journal. This can cause deleted records to be
 restored by a later sync. Export a local backup before installing the
 cloud-enabled build, and do not downgrade while cloud sync is active.

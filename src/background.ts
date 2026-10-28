@@ -61,7 +61,16 @@ chrome.idle.onStateChanged.addListener(
 // Cloud sync is opt-in, encrypted and limited to the selected personal account.
 void startChangeFeed();
 const CLOUD_SYNC_ALARM = 'tabverse_personal_cloud_sync';
-void chrome.alarms.create(CLOUD_SYNC_ALARM, { periodInMinutes: 5 });
+void chrome.alarms
+  .get(CLOUD_SYNC_ALARM)
+  .then(async (existing) => {
+    if (!existing) {
+      await chrome.alarms.create(CLOUD_SYNC_ALARM, {
+        periodInMinutes: 5,
+      });
+    }
+  })
+  .catch((err) => logger.error('Could not schedule private cloud sync', err));
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === CLOUD_SYNC_ALARM) {
     void syncPrivateCloud().catch(() => undefined);

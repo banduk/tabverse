@@ -106,10 +106,7 @@ export async function createVault(passphrase: string): Promise<void> {
 export async function unlockVault(passphrase: string): Promise<void> {
   const meta = await readVaultMetadata();
   if (!meta) throw new Error('Vault has not been initialized.');
-  const wrappingKey = await passwordKey(
-    passphrase,
-    fromBase64(meta.salt),
-  );
+  const wrappingKey = await passwordKey(passphrase, fromBase64(meta.salt));
   let dek: ArrayBuffer;
   try {
     dek = await crypto.subtle.decrypt(
@@ -154,7 +151,7 @@ export async function isVaultUnlocked(): Promise<boolean> {
 
 export async function lockVault(): Promise<void> {
   cached = null;
-  await chrome.storage.session.remove(VAULT_SESSION_KEY);
+  await chrome.storage.session.remove([VAULT_SESSION_KEY, 'tabverse_private_cloud_session_v1']);
 }
 
 /** Lock other extension contexts when the user locks this one. */

@@ -50,7 +50,8 @@ export async function encryptVaultRow(
 ): Promise<Record<string, any>> {
   const fields = publicFields(table, row);
   const identifier = table === 'SavedCloudJournal' ? fields.key : fields.id;
-  if (typeof identifier !== 'string') throw new Error('Missing vault primary key');
+  if (typeof identifier !== 'string')
+    throw new Error('Missing vault primary key');
   const payload = await sealJson(row, rowAAD(table, fields));
   return { ...fields, __vault: payload };
 }
@@ -63,7 +64,9 @@ export async function decryptVaultRow(
   if (!raw) return undefined;
   if (!isSealed(raw.__vault)) {
     if (legacyAllowed) return raw;
-    throw new Error('Unencrypted legacy record: unlock and finish vault migration.');
+    throw new Error(
+      'Unencrypted legacy record: unlock and finish vault migration.',
+    );
   }
   const fields = publicFields(table, raw);
   const clear = await unsealJson<Record<string, any>>(
@@ -99,12 +102,14 @@ export function applyVaultMiddleware(db: Dexie): void {
           ...inner,
           mutate: (request) => {
             if (request.type !== 'add' && request.type !== 'put') {
-              return Dexie.waitFor(vaultKey()).then(() => inner.mutate(request));
+              return Dexie.waitFor(vaultKey()).then(() =>
+                inner.mutate(request),
+              );
             }
             return Dexie.waitFor(
-              Promise.all(request.values.map((value) =>
-                encryptVaultRow(name, value),
-              )),
+              Promise.all(
+                request.values.map((value) => encryptVaultRow(name, value)),
+              ),
             ).then((values) => inner.mutate({ ...request, values }));
           },
           get: (request) =>

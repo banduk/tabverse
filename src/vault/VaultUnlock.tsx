@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, InputGroup } from '@blueprintjs/core';
-import {
-  createVault,
-  readVaultMetadata,
-  unlockVault,
-} from './keyring';
+import { createVault, readVaultMetadata, unlockVault } from './keyring';
 import { migrateLocalVault } from './migrate';
 
 export interface VaultUnlockProps {

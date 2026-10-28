@@ -83,12 +83,14 @@ test('encrypted Chrome storage has no plaintext and decrypts after unlock', asyn
   const raw = new MemoryStorageArea();
   const protectedArea = new VaultStorageArea(raw);
   await protectedArea.set({
-    tabverse_ai_chat_v1: [
-      { content: 'internal confidential meeting' },
-    ],
+    tabverse_ai_chat_v1: [{ content: 'internal confidential meeting' }],
   });
   const exposed = await raw.get(['tabverse_ai_chat_v1']);
-  expect(JSON.stringify(exposed)).not.toContain('internal confidential meeting');
-  expect((await protectedArea.get(['tabverse_ai_chat_v1']))
-    .tabverse_ai_chat_v1[0].content).toBe('internal confidential meeting');
+  expect(JSON.stringify(exposed)).not.toContain(
+    'internal confidential meeting',
+  );
+  expect(
+    (await protectedArea.get(['tabverse_ai_chat_v1'])).tabverse_ai_chat_v1[0]
+      .content,
+  ).toBe('internal confidential meeting');
 });

@@ -94,7 +94,8 @@ export async function startChangeFeed(
     return;
   }
   changeFeedStarted = true;
-  const storage = options.storage || new VaultStorageArea(new ChromeStorageArea());
+  const storage =
+    options.storage || new VaultStorageArea(new ChromeStorageArea());
   const outbox = options.outbox || new Outbox(storage);
   const database = options.database || db;
 

@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, 'privacy/**', 'feature/**']
+    branches: [main]
   pull_request:
     branches: [main, 'privacy/**', 'feature/**']
   workflow_dispatch:

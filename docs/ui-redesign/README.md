@@ -1,6 +1,6 @@
-# PR #4 — Tabverse Native Chrome UI: design decision
+# PR #4 — Tabverse Native Chrome UI: hybrid implementation
 
-This PR begins as a **design-review draft**. **No existing production UI, browser permissions, cloud sync or vault code is changed yet**. Choose a direction before replacing BlueprintJS across the app.
+This PR began as a design-review draft and now implements the chosen hybrid. It modifies the extension UI and adds the official `sidePanel` permission, but leaves encryption, cloud sync and network permissions unchanged.
 
 ## Goal
 
@@ -60,7 +60,7 @@ GitHub Actions workflow **UI prototype screenshots** also renders all four and u
 
 ## Decision
 
-**Choose A or B**. Then evolve PR #4 from design mockups into production code. Keep it in Draft until the selected UI is implemented and full E2E accessibility/security checks pass.
+**Approved hybrid: the layout of A with the styling of B, plus Chrome's actual Side Panel for quick access.** Keep this PR as a draft until CI and manual accessibility/security checks pass.
 
 
 ## Decision adopted — hybrid Chrome UI (2026-10-28)

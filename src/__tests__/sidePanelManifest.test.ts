@@ -9,9 +9,9 @@ test('Chrome toolbar opens a packaged native side panel', () => {
   expect(manifest.permissions).toContain('sidePanel');
   expect(manifest.side_panel.default_path).toBe('sidepanel.html');
   expect(manifest.action.default_popup).toBeUndefined();
-  expect(
-    existsSync(new URL('../../sidepanel.html', import.meta.url)),
-  ).toBe(true);
+  expect(existsSync(new URL('../../sidepanel.html', import.meta.url))).toBe(
+    true,
+  );
   expect(manifest.content_security_policy.extension_pages).toContain(
     "script-src 'self'",
   );

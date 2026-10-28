@@ -192,7 +192,9 @@ export function SidePanelView() {
       } else {
         // A saved workspace gets its own window: never replace the user's current work.
         await chrome.windows.create({
-          url: chrome.runtime.getURL(tabverseUrl(TabSpaceOp.LoadSaved, space.id)),
+          url: chrome.runtime.getURL(
+            tabverseUrl(TabSpaceOp.LoadSaved, space.id),
+          ),
         });
       }
     } catch (reason) {

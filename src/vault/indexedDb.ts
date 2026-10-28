@@ -201,7 +201,9 @@ export function applyVaultMiddleware(db: Dexie): void {
                 position += 1;
                 while (
                   position < rows.length &&
-                  dbcore.cmp(rows[position].key, key) < 0
+                  (request.reverse
+                    ? Dexie.cmp(rows[position].key, key) > 0
+                    : Dexie.cmp(rows[position].key, key) < 0)
                 ) {
                   position += 1;
                 }
@@ -211,9 +213,13 @@ export function applyVaultMiddleware(db: Dexie): void {
                 position += 1;
                 while (
                   position < rows.length &&
-                  (dbcore.cmp(rows[position].key, key) < 0 ||
-                    (dbcore.cmp(rows[position].key, key) === 0 &&
-                      dbcore.cmp(rows[position].primaryKey, primaryKey) < 0))
+                  ((request.reverse
+                    ? Dexie.cmp(rows[position].key, key) > 0
+                    : Dexie.cmp(rows[position].key, key) < 0) ||
+                    (Dexie.cmp(rows[position].key, key) === 0 &&
+                      (request.reverse
+                        ? Dexie.cmp(rows[position].primaryKey, primaryKey) > 0
+                        : Dexie.cmp(rows[position].primaryKey, primaryKey) < 0)))
                 ) {
                   position += 1;
                 }

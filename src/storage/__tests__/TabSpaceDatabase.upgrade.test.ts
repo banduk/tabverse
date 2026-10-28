@@ -129,11 +129,14 @@ describe(`schema v${TABSPACE_DB_VERSION}`, () => {
     );
 
     // the other stores are still readable and their rows survived
-    for (const name of Object.keys(schemas)) {
+    for (const name of Object.keys(V7_SCHEMAS).filter(
+      (key) => key !== 'ChromeSession',
+    )) {
       const row = await database.table(name).get(`row-${name}`);
       expect(row, `row in ${name}`).toBeTruthy();
     }
 
+    expect(await database.table('SavedCloudJournal').count()).toBe(0);
     await database.delete();
   });
 
@@ -170,27 +173,19 @@ describe(`schema v${TABSPACE_DB_VERSION}`, () => {
     await database.delete();
   });
 
-  test('an older build can still open the database', async () => {
+  test('upgraded journal schema intentionally blocks older builds', async () => {
     await createV7Database();
     const current = new TabSpaceDatabase(TAG);
     await current.open();
     await current.close();
 
-    // Worth knowing: dropping the store does NOT lock out older builds. Dexie
-    // compares the declared v7 schema with the installed one, sees the missing
-    // store, re-creates it and bumps the native version ("SchemaDiff: Schema
-    // was extended..."). A rolled back build therefore keeps working and goes
-    // back to recording session snapshots - which the server still accepts and
-    // prunes, so nothing breaks in either direction.
+    // v12 adds a journal for reliable cloud deletions; older v7 builds
+    // cannot reopen it without restoring a backup (IndexedDB VersionError).
     const older = new Dexie(DB_NAME);
     older.version(7).stores(V7_SCHEMAS);
-    await older.open();
-
-    expect(older.tables.map((t) => t.name)).toContain('ChromeSession');
-    // and the other stores are still there
-    await expect(
-      older.table('SavedNote').get('row-SavedNote'),
-    ).resolves.toBeTruthy();
+    await expect(older.open()).rejects.toMatchObject({
+      name: 'VersionError',
+    });
 
     await older.delete();
   });

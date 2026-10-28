@@ -67,3 +67,10 @@ https://docs.github.com/en/rest/repos/contents
   storing confidential work data.
 - Backup exports are advisable. The initial synchronization of large vaults
   may take time and can reach provider/API size or request limits.
+
+## Browser downgrade
+
+This feature raises the IndexedDB schema from v11 to v12 for durable
+cross-device deletion tombstones. Downgrading to a v11 Tabverse build after
+opening v12 can result in IndexedDB VersionError. Export a local backup
+before installing the cloud-enabled build.

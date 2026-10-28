@@ -68,6 +68,23 @@ test('raw IndexedDB contains ciphertext but public Dexie returns cleartext', asy
     .toArray();
   expect(queried[0].url).toBe(row.url);
 
+  const visited: string[] = [];
+  await db
+    .table('SavedTab')
+    .where('createdAt')
+    .above(0)
+    .each((item) => {
+      visited.push(item.title);
+    });
+  expect(visited).toEqual(['Secret court case']);
+
+  const updated = await db.table('SavedTab').update('tab1', {
+    title: 'Revised secret title',
+  });
+  expect(updated).toBe(1);
+  const afterUpdate = await db.table('SavedTab').get('tab1');
+  expect(afterUpdate.title).toBe('Revised secret title');
+
   await lockVault();
   await expect(db.table('SavedTab').get('tab1')).rejects.toThrow('locked');
   await db.close();

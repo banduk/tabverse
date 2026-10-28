@@ -3,6 +3,7 @@
  * an independently authenticated ciphertext; mixed states can be resumed.
  */
 import { db } from '../storage/db';
+import type { Dexie } from 'dexie';
 import { ENCRYPTED_TABLES, allowLegacyVaultRecords } from './indexedDb';
 import { markVaultMigrated, readVaultMetadata, vaultKey } from './keyring';
 import { migrateSensitiveStorage } from './storage';
@@ -17,25 +18,30 @@ export async function migrateLocalVault(): Promise<void> {
     await vaultKey();
     if (meta.migrated) return;
 
-    allowLegacyVaultRecords(true);
-    try {
-      for (const tableName of ENCRYPTED_TABLES) {
-        // Limit work per transaction so the browser can recover after crashes.
-        const table = db.table(tableName);
-        const rows = await table.toArray();
-        for (const row of rows) {
-          await table.put(row);
-        }
-      }
-      await migrateSensitiveStorage();
-      await markVaultMigrated();
-    } finally {
-      allowLegacyVaultRecords(false);
-    }
+    await encryptLegacyDatabaseRows(db);
+    await migrateSensitiveStorage();
+    await markVaultMigrated();
   })();
   try {
     await migration;
   } finally {
     migration = null;
+  }
+}
+
+/** Can run against a test database; normal app uses the shared Dexie handle. */
+export async function encryptLegacyDatabaseRows(database: Dexie): Promise<void> {
+  await vaultKey();
+  allowLegacyVaultRecords(true);
+  try {
+    for (const tableName of ENCRYPTED_TABLES) {
+      const table = database.table(tableName);
+      const rows = await table.toArray();
+      for (const row of rows) {
+        await table.put(row);
+      }
+    }
+  } finally {
+    allowLegacyVaultRecords(false);
   }
 }

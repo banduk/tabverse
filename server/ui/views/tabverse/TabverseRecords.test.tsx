@@ -200,11 +200,12 @@ test('no notes at all is the extension`s own notice', () => {
 
 // ---- bookmark --------------------------------------------------------------
 
-test('a bookmark is its name over its url, with the icon it stored', () => {
+test('a bookmark shows its name and url without fetching a remote favicon', () => {
   const html = renderToStaticMarkup(<BookmarkPanel bookmarks={[bookmark()]} />);
   expect(html).toContain('docs');
   expect(html).toContain('https://example.com/docs');
-  expect(html).toContain('favicon.ico');
+  expect(html).toContain('data:image/svg+xml');
+  expect(html).not.toContain('favicon.ico');
 });
 
 test('a bookmark cannot be opened into this window or deleted from here', () => {

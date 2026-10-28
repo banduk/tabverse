@@ -24,6 +24,16 @@ void isVaultUnlocked().then((unlocked) => {
     ) : (
       <div role="status" style={{ padding: '16px' }}>
         Local vault is locked. Open the Tabverse manager to unlock it.
+        <button
+          type="button"
+          onClick={() =>
+            void chrome.tabs.create({
+              url: chrome.runtime.getURL('manager.html?op=new'),
+            })
+          }
+        >
+          Open manager
+        </button>
       </div>
     ),
   });

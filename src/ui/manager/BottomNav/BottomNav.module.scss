@@ -36,3 +36,14 @@
   height: 40px;
   border-radius: 12px;
 }
+
+
+/* Fixed footer shares the navigation rail's neutral background. */
+.container { left: 0; }
+.navbar { background: var(--tv-alt) !important; border-top: 1px solid var(--tv-border); box-shadow: none; }
+.navbar :global(.bp6-button) {
+  color: var(--tv-muted) !important; background: transparent !important;
+  box-shadow: none !important; border-radius: 18px;
+}
+.navbar :global(.bp6-button):hover { background: var(--tv-hover) !important; color: var(--tv-text) !important; }
+

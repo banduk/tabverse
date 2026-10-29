@@ -89,3 +89,13 @@
 .clearHidden {
   visibility: hidden;
 }
+
+/* The active-tab filter is a subdued Chrome-style field in both themes. */
+.container :global(.bp6-input-group),
+.container :global(.bp6-input-group):focus,
+.container :global(.bp6-input-group) :global(.bp6-input),
+.container :global(.bp6-input-group) :global(.bp6-input):focus {
+  background: var(--tv-field);
+  color: var(--tv-text);
+}
+.count { background: var(--tv-selected); color: var(--tv-accent); }

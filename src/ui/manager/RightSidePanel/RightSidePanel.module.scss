@@ -87,3 +87,13 @@
   min-height: 0;
   padding: 8px 12px 12px;
 }
+
+
+/* Auxiliary console/history drawer follows the same flat Chrome surfaces. */
+.rail { background: var(--tv-alt); }
+.railButton { background: var(--tv-alt); border: 1px solid var(--tv-border); border-right: none; color: var(--tv-muted); border-radius: 8px 0 0 8px; }
+.railButton:hover { background: var(--tv-hover); }
+.drawer { background: var(--tv-bg); border-left: 1px solid var(--tv-border); box-shadow: none; }
+.header { border-bottom-color: var(--tv-border); }
+.title { color: var(--tv-text); }
+

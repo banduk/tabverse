@@ -1,0 +1,51 @@
+name: Chrome-native UI packaged E2E
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ui/**'
+      - 'src/background.ts'
+      - 'src/manifest.json'
+      - 'sidepanel.html'
+      - 'manager.html'
+      - 'tools/e2e_chrome_ui.py'
+      - '.github/workflows/chrome-ui-e2e.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  packaged-ui:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build-store
+      - run: |
+          python -m pip install playwright==1.58.0
+          python -m playwright install --with-deps chromium
+      - name: Exercise unpacked store ZIP with real Chrome extension APIs
+        env:
+          TABVERSE_EXTENSION_DIR: .ui-e2e-zip/tabverse
+        run: |
+          mkdir -p .ui-e2e-zip
+          unzip -q dist_store/tabverse.zip -d .ui-e2e-zip
+          python tools/e2e_chrome_ui.py
+      - name: Save diagnostic screenshots and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-native-ui-e2e
+          path: ui-e2e-results/
+          retention-days: 14

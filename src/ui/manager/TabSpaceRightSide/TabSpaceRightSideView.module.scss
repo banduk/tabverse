@@ -106,3 +106,20 @@
   color: inherit;
 }
 
+
+/* Quiet inspector with understated, underlined tabs. */
+.container { margin: 0; padding: 26px 18px; color: var(--tv-text); }
+.tabsContainer { margin-bottom: 24px; }
+.bpTabs :global(.bp6-tab) {
+  color: var(--tv-muted); background: transparent !important; border-radius: 0;
+  padding: 8px 7px; font-size: 12px; font-weight: 500;
+}
+.bpTabs :global(.bp6-tab)[aria-selected='true'] {
+  color: var(--tv-accent); border-bottom: 2px solid var(--tv-accent);
+  border-radius: 0; background: transparent !important; font-weight: 600; padding: 8px 7px 6px;
+}
+.bpTabs :global(.bp6-tab):not([aria-selected='true']):not([aria-disabled='true']):hover {
+  color: var(--tv-text); background: var(--tv-hover) !important;
+}
+.bpTabs :global(.bp6-tab-list) { flex-wrap: wrap; border-bottom: 1px solid var(--tv-border); }
+

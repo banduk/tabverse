@@ -234,3 +234,9 @@ startDedupScanner();
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) =>
   handleDedupMessage(message, sendResponse),
 );
+
+// The toolbar action now toggles Chrome's native, global side panel.
+// Kept at worker startup so an extension update also configures existing users.
+void chrome.sidePanel
+  .setPanelBehavior({ openPanelOnActionClick: true })
+  .catch((err) => logger.error('Could not configure Tabverse side panel', err));

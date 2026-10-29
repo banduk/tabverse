@@ -61,3 +61,12 @@
   overflow-x: hidden;
   padding-left: 20px;
 }
+
+
+/* Chrome Settings vocabulary also applies to the existing settings surface. */
+.dialog { background: var(--tv-bg); border: 1px solid var(--tv-border); border-radius: 12px; box-shadow: none; }
+.dialog :global(.bp6-dialog-header) { background: var(--tv-bg); border-bottom: 1px solid var(--tv-border); border-radius: 12px 12px 0 0; }
+.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) { border-right-color: var(--tv-border); }
+.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) :global(.bp6-tab) { border-radius: 18px; color: var(--tv-muted); font-weight: 500; }
+.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) :global(.bp6-tab)[aria-selected='true'] { background: var(--tv-selected); color: var(--tv-accent); }
+

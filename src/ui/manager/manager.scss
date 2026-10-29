@@ -1,25 +1,6 @@
-@use '../../global.scss';
-
-// Page level chrome for the manager page only. The shared control styles
-// (buttons, inputs, callouts, cards) live in ../theme.scss, which both this
-// page and the popup import.
-
+/* Manager surface: each column owns its scrolling; focus remains visible. */
 body {
-  color: global.$color-text;
-  background-color: global.$color-background;
   overflow: hidden;
+  background: var(--tv-bg);
+  color: var(--tv-text);
 }
-
-:focus {
-  outline: none;
-}
-
-.stickyOn .header {
-  box-shadow: 0 2px 10px -5px rgb(16 22 26 / 60%);
-}
-
-
-/* The manager keeps three columns: navigation, workspace, tools inspector. */
-body { color: var(--tv-text); background: var(--tv-bg); }
-.stickyOn .header { box-shadow: none; }
-

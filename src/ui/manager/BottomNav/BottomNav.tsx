@@ -1,7 +1,6 @@
 import {
   Alignment,
   Button,
-  Classes,
   Navbar,
   NavbarGroup,
   Tooltip,
@@ -83,11 +82,11 @@ export const BottomNav = () => {
   return (
     <div className={clsx(classes.container, collapsed && classes.collapsed)}>
       {collapsed ? (
-        <div className={clsx(Classes.DARK, classes.navbar, classes.rail)}>
+        <div className={clsx(classes.navbar, classes.rail)}>
           {navButtons}
         </div>
       ) : (
-        <Navbar className={clsx(Classes.DARK, classes.navbar)}>
+        <Navbar className={classes.navbar}>
           <NavbarGroup align={Alignment.LEFT}>{navButtons}</NavbarGroup>
         </Navbar>
       )}

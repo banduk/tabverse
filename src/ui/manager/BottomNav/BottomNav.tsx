@@ -82,9 +82,7 @@ export const BottomNav = () => {
   return (
     <div className={clsx(classes.container, collapsed && classes.collapsed)}>
       {collapsed ? (
-        <div className={clsx(classes.navbar, classes.rail)}>
-          {navButtons}
-        </div>
+        <div className={clsx(classes.navbar, classes.rail)}>{navButtons}</div>
       ) : (
         <Navbar className={classes.navbar}>
           <NavbarGroup align={Alignment.LEFT}>{navButtons}</NavbarGroup>

@@ -27,7 +27,9 @@ export function TabSpaceView() {
       </nav>
       <div
         className={
-          showTools ? `${classes.columns} ${classes.showTools}` : classes.columns
+          showTools
+              ? `${classes.columns} ${classes.showTools}`
+              : classes.columns
         }
       >
         <div className={classes.mainContainer}>

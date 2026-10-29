@@ -6,6 +6,9 @@ import classes from './TabSpaceView.module.scss';
 
 export function TabSpaceView() {
   const [showTools, setShowTools] = useState(false);
+  const columnClasses = showTools
+    ? `${classes.columns} ${classes.showTools}`
+    : classes.columns;
 
   return (
     <div className={classes.container}>
@@ -25,13 +28,7 @@ export function TabSpaceView() {
           Ferramentas
         </button>
       </nav>
-      <div
-        className={
-          showTools
-              ? `${classes.columns} ${classes.showTools}`
-              : classes.columns
-        }
-      >
+      <div className={columnClasses}>
         <div className={classes.mainContainer}>
           <SimpleBarReact autoHide={true} style={{ height: '100%' }}>
             <TabSpaceListView />

@@ -74,13 +74,14 @@ function extensionManifest(): Plugin {
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development';
 
-  // Three user surfaces: side panel, manager, and legacy standalone popup; icon/devdata are developer
-  // tools that must not ship in the store package.
+  // First-party surfaces: Side Panel, manager, legacy popup and welcome page.
+  // Developer icon/devdata pages never ship in the store package.
   const input: Record<string, string> = {
     background: fromRoot('src/background.ts'),
     popup: fromRoot('popup.html'),
     manager: fromRoot('manager.html'),
     sidepanel: fromRoot('sidepanel.html'),
+    welcome: fromRoot('welcome.html'),
   };
   if (isDev) {
     input.icon = fromRoot('icon.html');

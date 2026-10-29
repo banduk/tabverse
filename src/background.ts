@@ -37,7 +37,12 @@ void chrome.storage.local
 // Idle-lock timeout (not the browser's short default interval).
 chrome.idle.setDetectionInterval(15 * 60);
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
+  // On first installation, explain the local vault and native Side Panel.
+  // Never open onboarding on ordinary extension upgrades or browser restarts.
+  if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    void chrome.tabs.create({ url: chrome.runtime.getURL('welcome.html') });
+  }
   chrome.tabs.query({ active: true }, (tabs) => {
     tabs[0] && chrome.tabs.reload(tabs[0].id);
   });

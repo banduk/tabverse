@@ -32,13 +32,9 @@
 }
 
 .todoapp {
-  background: #fff;
+  background: var(--tv-surface);
   position: relative;
-  font:
-    20px 'Helvetica Neue',
-    Helvetica,
-    Arial,
-    sans-serif;
+  font: inherit;
   border-radius: global.$radius-card;
   display: flex;
   flex-direction: column;
@@ -72,7 +68,7 @@
 .todoapp input::placeholder {
   font-style: italic;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.4);
+  color: var(--tv-muted);
   opacity: 1;
 }
 
@@ -104,8 +100,8 @@
 }
 
 .todoapp .newTodo {
-  padding: 16px 16px 16px 60px;
-  height: 65px;
+  padding: 10px 12px 10px 46px;
+  min-height: 42px;
   border: none;
   background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
@@ -114,7 +110,7 @@
 .todoapp .main {
   position: relative;
   z-index: 2;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid var(--tv-border);
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
@@ -147,14 +143,14 @@
   content: '❯';
   display: inline-block;
   font-size: 22px;
-  color: #949494;
+  color: var(--tv-muted);
   padding: 10px 27px 10px 27px;
   transform: rotate(90deg);
   transition: all 200ms linear;
 }
 
 .todoapp .toggleAll:checked + label:before {
-  color: #484848;
+  color: var(--tv-text);
 }
 
 .todoapp .todoList {
@@ -169,7 +165,7 @@
 .todoapp .todoList li {
   position: relative;
   // font-size: 24px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--tv-border);
 }
 
 .todoapp .todoList li:last-child {
@@ -226,11 +222,11 @@
 
 .todoapp .todoList li button.content {
   word-break: break-all;
-  padding: 15px 15px 15px 60px;
+  padding: 12px 12px 12px 46px;
   display: block;
   line-height: 1.2;
   transition: color 0.4s;
-  color: #484848;
+  color: var(--tv-text);
   /*
     A real <button> now (editable by double click or Enter). The UA style is
     `font: 400 13.333px Arial`, so the whole font shorthand has to be reset -
@@ -247,7 +243,7 @@
 }
 
 .todoapp .todoList li.completed button.content {
-  color: #949494;
+  color: var(--tv-muted);
   text-decoration: line-through;
 }
 
@@ -261,7 +257,7 @@
   height: 40px;
   margin: auto 0;
   font-size: 30px;
-  color: #949494;
+  color: var(--tv-muted);
   transition: color 0.2s ease-out;
 }
 
@@ -290,12 +286,12 @@
 }
 
 .todoapp .footer {
-  color: #777;
+  color: var(--tv-muted);
   padding: 10px 15px;
   height: 40px;
   text-align: center;
   font-size: 15px;
-  border-top: 1px solid #e6e6e6;
+  border-top: 1px solid var(--tv-border);
   flex: none;
 }
 
@@ -354,11 +350,11 @@
 }
 
 .todoapp .filters li button:hover {
-  border-color: rgba(19, 124, 189, 0.8);
+  border-color: var(--tv-accent);
 }
 
 .todoapp .filters li button.selected {
-  border-color: rgba(19, 124, 189, 0.6);
+  border-color: var(--tv-accent);
 }
 
 .todoapp .clearCompleted,
@@ -376,9 +372,9 @@
 
 .todoapp .info {
   margin: 65px auto 0;
-  color: #4d4d4d;
+  color: var(--tv-muted);
   font-size: 11px;
-  text-shadow: 0 1px 0 global.$color-main-brand;
+  text-shadow: none;
   text-align: center;
 }
 

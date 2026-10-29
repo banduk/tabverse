@@ -1,9 +1,9 @@
 @use '../../global.scss';
 
 .container {
-  background: #fff;
+  background: var(--tv-surface);
   position: relative;
-  color: #111111;
+  color: var(--tv-text);
   border-radius: global.$radius-card;
   display: flex;
   flex-direction: column;
@@ -33,7 +33,7 @@
   display: flex;
   width: 100%;
   padding: 12px 12px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--tv-border);
 }
 
 .favIcon {
@@ -41,8 +41,9 @@
 }
 
 .label {
-  width: 98%;
-  word-break: break-all;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .label :global(.bp6-editable-text) {
@@ -50,8 +51,8 @@
 }
 
 .noticeContainer {
-  background: #fff;
-  color: #999;
+  background: var(--tv-surface);
+  color: var(--tv-muted);
   padding: 8px 18px;
   font-style: italic;
   font-weight: 500;

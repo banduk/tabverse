@@ -31,7 +31,3 @@
 .collapseToggle :global(.bp6-button) :global(.bp6-icon) > svg { fill: currentColor; }
 .collapseToggle :global(.bp6-button):hover { color: var(--tv-text); background: var(--tv-hover); }
 
-@media (max-width: 780px) {
-  .topContainer { --sidebar-width: 60px; }
-  .leftContainer { padding-left: 6px; padding-right: 6px; }
-}

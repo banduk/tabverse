@@ -18,12 +18,12 @@ export function TabSpaceView() {
       </nav>
       <div className={showTools ? `${classes.columns} ${classes.showTools}` : classes.columns}>
         <div className={classes.mainContainer}>
-        <SimpleBarReact autoHide={true} style={{ maxHeight: '100vh' }}>
+        <SimpleBarReact autoHide={true} style={{ height: '100%' }}>
           <TabSpaceListView />
         </SimpleBarReact>
       </div>
       <div className={classes.rightSideContainer}>
-        <SimpleBarReact autoHide={true} style={{ maxHeight: '100vh' }}>
+        <SimpleBarReact autoHide={true} style={{ height: '100%' }}>
           <TabSpaceRightSideView />
         </SimpleBarReact>
       </div>

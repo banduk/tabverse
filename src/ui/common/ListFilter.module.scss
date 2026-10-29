@@ -1,49 +1,31 @@
-@use '../../global.scss';
-
-/*
- * A filter box that sits at the top of a right-panel list. No vertical margin
- * of its own: the box is placed by its caller, so a row that centres it beside
- * a button (the Note panel) is not thrown off by a stray margin.
- */
-.container {
-  width: 100%;
-}
-
-.right {
-  position: absolute;
-  top: -2px;
-  right: 0;
+/* Shared inline filter for notes, bookmarks and history. */
+.container { width: 100%; min-width: 0; }
+.container :global(.bp6-input-group) {
+  position: relative;
   display: flex;
   align-items: center;
+  min-height: 36px;
+}
+.right {
+  position: absolute;
+  inset-block: 0;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   gap: 6px;
-  padding-right: 6px;
   z-index: 1;
 }
-
 .count {
   display: inline-flex;
   align-items: center;
-  height: 20px;
+  min-height: 20px;
   padding: 0 8px;
   border-radius: 10px;
-  background-color: global.$color-light-shade;
-  color: global.$color-d;
-  font-size: 12px;
-  line-height: 1;
+  background: var(--tv-selected);
+  color: var(--tv-on-selected);
+  font-size: 11px;
   white-space: nowrap;
 }
-
-/* Room for the count pill and the clear button, taken out of the flow above. */
-.input :global(.bp6-input) {
-  padding-right: 96px;
-}
-
-/*
- * The clear button keeps its place whether or not there is anything to clear,
- * so the count does not jump sideways the moment the box has text in it.
- * `visibility` rather than `display`: a hidden button that took no space would
- * defeat the point, and this one is out of the tab order while hidden.
- */
-.clearHidden {
-  visibility: hidden;
-}
+.input :global(.bp6-input) { padding-right: 96px; }
+.clearHidden { visibility: hidden; }

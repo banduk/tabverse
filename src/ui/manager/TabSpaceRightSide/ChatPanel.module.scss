@@ -16,7 +16,7 @@
   max-height: var(--tool-content-max-height, 45vh);
   /* a near-white card, the same surface the Todo and Note tools draw */
   padding: 10px 12px;
-  background-color: #fff;
+  background-color: var(--tv-surface);
   border-radius: global.$radius-card;
 }
 
@@ -31,7 +31,7 @@
   text-align: center;
   /* the same near-white card as `.view`, so an empty chat is a surface too */
   padding: 16px;
-  background-color: #fff;
+  background-color: var(--tv-surface);
   border-radius: global.$radius-card;
 }
 
@@ -42,7 +42,7 @@
   gap: 8px;
   padding: 2px 2px 10px;
   font-size: 0.78em;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
 }
 
 /*
@@ -71,14 +71,14 @@
   width: 140px;
   height: 6px;
   border-radius: 999px;
-  background-color: global.$color-light-shade;
+  background-color: var(--tv-field);
   overflow: hidden;
 }
 
 .contextFill {
   height: 100%;
   border-radius: 999px;
-  background-color: global.$color-main-brand;
+  background-color: var(--tv-accent);
   transition: width 200ms ease-out;
 }
 
@@ -99,7 +99,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
   font-size: 0.9em;
   text-align: center;
 }
@@ -130,8 +130,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  background-color: global.$color-light-shade;
-  color: global.$color-main-brand;
+  background-color: var(--tv-field);
+  color: var(--tv-accent);
 }
 
 .bubble {
@@ -143,17 +143,17 @@
 }
 
 .bubbleUser {
-  background-color: global.$color-b;
+  background-color: var(--tv-selected);
   border-bottom-right-radius: 4px;
 }
 
 .bubbleAssistant {
-  background-color: global.$color-light-shade;
+  background-color: var(--tv-field);
   border-bottom-left-radius: 4px;
 }
 
 .bubbleError {
-  background-color: #fbeae9;
+  background-color: var(--tv-danger-bg);
 }
 
 .text {
@@ -167,7 +167,7 @@
 .meta {
   flex: 1 1 auto;
   font-size: 0.75em;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -191,13 +191,13 @@
   border: 0;
   border-radius: 6px;
   background: none;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
   cursor: pointer;
 }
 
 .action:hover:not(:disabled) {
-  background-color: rgb(29 25 31 / 8%);
-  color: global.$color-text;
+  background-color: var(--tv-hover);
+  color: var(--tv-text);
 }
 
 .action:disabled {
@@ -253,7 +253,7 @@
 }
 
 .markdown a {
-  color: global.$color-main-brand;
+  color: var(--tv-accent);
 }
 
 .markdown code {
@@ -261,7 +261,7 @@
   font-size: 0.88em;
   padding: 1px 4px;
   border-radius: 4px;
-  background-color: rgb(29 25 31 / 8%);
+  background-color: var(--tv-hover);
 }
 
 .markdown pre {
@@ -269,8 +269,8 @@
   padding: 8px 10px;
   border-radius: 8px;
   overflow-x: auto;
-  background-color: global.$color-dark-shade;
-  color: global.$color-on-brand;
+  background-color: var(--tv-alt);
+  color: var(--tv-text);
 }
 
 .markdown pre code {
@@ -283,7 +283,7 @@
   margin: 0 0 8px;
   padding-left: 10px;
   border-left: 3px solid global.$color-e;
-  color: global.$color-dark-accent;
+  color: var(--tv-muted);
 }
 
 .markdown hr {
@@ -301,7 +301,7 @@
 .markdown th,
 .markdown td {
   padding: 4px 8px;
-  border: 1px solid global.$color-e;
+  border: 1px solid var(--tv-border);
   text-align: left;
 }
 
@@ -310,7 +310,7 @@
 }
 
 .errorText {
-  color: #cd4246;
+  color: var(--tv-danger);
 }
 
 .thinking {
@@ -319,7 +319,7 @@
   gap: 6px;
   padding-left: 32px;
   font-size: 0.8em;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
 }
 
 /*
@@ -328,11 +328,11 @@
  */
 .compact {
   margin: 2px 0;
-  border: 1px dashed global.$color-e;
+  border: 1px dashed var(--tv-border);
   border-radius: 10px;
-  background-color: rgb(240 241 242 / 60%);
+  background-color: var(--tv-alt);
   font-size: 0.82em;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
 }
 
 .compactSummary {
@@ -350,15 +350,15 @@
 
 .compactBody {
   padding: 0 10px 8px;
-  color: global.$color-text;
+  color: var(--tv-text);
 }
 
 .error {
   margin: 0 0 8px;
   padding: 6px 10px;
   border-radius: 8px;
-  background-color: #fbeae9;
-  color: #cd4246;
+  background-color: var(--tv-danger-bg);
+  color: var(--tv-danger);
   font-size: 0.85em;
 }
 
@@ -368,9 +368,9 @@
  */
 .contextBlock {
   margin: 0 0 8px;
-  border: 1px solid rgb(29 25 31 / 14%);
+  border: 1px solid var(--tv-border);
   border-radius: 10px;
-  background-color: rgb(255 255 255 / 55%);
+  background-color: var(--tv-surface);
   font-size: 0.82em;
   overflow: hidden;
 }
@@ -418,8 +418,8 @@
   margin-bottom: 6px;
   padding: 3px 4px 3px 8px;
   border-radius: 999px;
-  background-color: global.$color-light-shade;
-  color: global.$color-text;
+  background-color: var(--tv-field);
+  color: var(--tv-text);
   font-size: 0.8em;
 }
 
@@ -442,13 +442,13 @@
   border: 0;
   border-radius: 50%;
   background: none;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
   cursor: pointer;
 }
 
 .contextChipRemove:hover {
-  background-color: rgb(29 25 31 / 8%);
-  color: global.$color-text;
+  background-color: var(--tv-hover);
+  color: var(--tv-text);
 }
 
 /*
@@ -458,18 +458,18 @@
  */
 .composer {
   flex: 0 0 auto;
-  border: 1px solid global.$color-e;
+  border: 1px solid var(--tv-border);
   border-radius: global.$radius-card;
   padding: 6px 8px 4px;
-  background-color: white;
+  background-color: var(--tv-surface);
   transition:
     border-color 120ms ease-out,
     box-shadow 120ms ease-out;
 }
 
 .composer:focus-within {
-  border-color: global.$color-main-brand;
-  box-shadow: 0 0 0 2px rgb(84 97 122 / 15%);
+  border-color: var(--tv-accent);
+  box-shadow: 0 0 0 1px var(--tv-accent);
 }
 
 .input {
@@ -499,7 +499,7 @@
 
 .hint {
   font-size: 0.72em;
-  color: global.$color-light-accent;
+  color: var(--tv-muted);
 }
 
 .spacer {

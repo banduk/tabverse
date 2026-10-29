@@ -1,8 +1,8 @@
 @use '../../global.scss';
 
 .container {
-  background: #fff;
-  color: #111111;
+  background: var(--tv-surface);
+  color: var(--tv-text);
   border-radius: global.$radius-card;
   padding: 8px 0 0 0;
   display: flex;
@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 12px 8px 12px;
-  color: #666666;
+  color: var(--tv-muted);
   font-size: 12px;
   flex: none;
 }
@@ -70,8 +70,7 @@
  */
 .searchRight {
   position: absolute;
-  top: 0;
-  bottom: 0;
+  inset-block: 0;
   right: 0;
   display: flex;
   align-items: center;
@@ -105,8 +104,8 @@
   height: 20px;
   padding: 0 8px;
   border-radius: 10px;
-  background-color: global.$color-light-shade;
-  color: global.$color-d;
+  background-color: var(--tv-field);
+  color: var(--tv-on-selected);
   font-size: 12px;
   line-height: 1;
   white-space: nowrap;
@@ -120,11 +119,11 @@
  * a day is not one.
  */
 .groupedContainer {
-  border-top: 1px solid #ededed;
+  border-top: 1px solid var(--tv-border);
 }
 
 .groupSection + .groupSection {
-  border-top: 1px solid #ededed;
+  border-top: 1px solid var(--tv-border);
 }
 
 .groupHeader {
@@ -132,14 +131,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 6px 12px;
-  background-color: global.$color-light-shade;
-  color: global.$color-d;
+  background-color: var(--tv-field);
+  color: var(--tv-on-selected);
   font-size: 12px;
   font-weight: 500;
 }
 
 .groupCount {
-  color: global.$color-text;
+  color: var(--tv-text);
 }
 
 .listItemView {
@@ -147,7 +146,7 @@
   align-items: center;
   width: 100%;
   padding: 8px 12px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--tv-border);
 }
 
 .favIcon {
@@ -177,18 +176,18 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #777777;
+  color: var(--tv-muted);
   font-size: 12px;
 }
 
 .labelTime {
-  color: #999999;
+  color: var(--tv-muted);
   font-size: 11px;
 }
 
 .noticeContainer {
-  background: #fff;
-  color: #999;
+  background: var(--tv-surface);
+  color: var(--tv-muted);
   padding: 8px 18px;
   font-style: italic;
   font-weight: 500;

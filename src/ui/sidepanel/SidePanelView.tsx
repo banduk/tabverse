@@ -176,14 +176,11 @@ export function SidePanelView() {
       ),
     [saved, matches],
   );
-  const sortedGroupIds = useMemo(() => {
-    const found = Array.from(new Set(displayedTabs.map((tab) => tab.groupId)));
-    return found.sort((a, b) => {
-      if (a === NO_GROUP) return 1;
-      if (b === NO_GROUP) return -1;
-      return a - b;
-    });
-  }, [displayedTabs]);
+  // Preserve the first occurrence of each group in Chrome's tab order.
+  const sortedGroupIds = useMemo(
+    () => Array.from(new Set(displayedTabs.map((tab) => tab.groupId))),
+    [displayedTabs],
+  );
 
   async function openManager(): Promise<void> {
     try {

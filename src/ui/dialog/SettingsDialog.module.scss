@@ -1,72 +1,58 @@
-@use '../../global.scss';
-
-/* the dialog surface, to match the app's rounded, borderless chrome */
+/* Settings use the same semantic surfaces as the manager. */
 .dialog {
-  border-radius: 18px;
-  background-color: #fff;
   width: min(960px, 94vw);
+  max-height: 92vh;
+  overflow: hidden;
+  border: 1px solid var(--tv-border);
+  border-radius: 12px;
+  background: var(--tv-surface);
+  color: var(--tv-text);
 }
-
 .dialog :global(.bp6-dialog-header) {
-  border-radius: 18px 18px 0 0;
-  background-color: #fff;
+  border-bottom: 1px solid var(--tv-border);
+  border-radius: 12px 12px 0 0;
+  background: var(--tv-surface);
   box-shadow: none;
 }
-
-.body {
-  padding: 18px;
-}
-
-/*
- * The vertical tab layout: the rail is the left column, the panel takes the
- * rest. Blueprint already lays the two out as a flex row (`.bp6-tabs.bp6-vertical`);
- * what is added here is the separation between them and the scroll rule - the
- * rail stays put while a long section moves.
- */
-.body :global(.bp6-tabs.bp6-vertical) {
-  align-items: stretch;
-  min-height: 420px;
-}
-
+.body { padding: 18px; min-height: 0; }
+.body :global(.bp6-tabs.bp6-vertical) { align-items: stretch; min-height: 0; }
 .body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) {
-  flex: 0 0 auto;
   min-width: 168px;
   padding-right: 12px;
-  border-right: 1px solid global.$color-light-shade;
+  border-right: 1px solid var(--tv-border);
 }
-
 .body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) :global(.bp6-tab) {
   margin-bottom: 4px;
-  font-weight: 600;
-  color: global.$color-text;
+  border-radius: 18px;
+  padding: 9px 12px;
+  color: var(--tv-muted);
+  font-weight: 500;
 }
-
-.body
-  :global(.bp6-tabs.bp6-vertical)
-  > :global(.bp6-tab-list)
-  :global(.bp6-tab)[aria-selected='true'] {
-  background-color: global.$color-light-shade;
-  color: global.$color-main-brand;
+.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) :global(.bp6-tab)[aria-selected='true'] {
+  background: var(--tv-selected);
+  color: var(--tv-on-selected);
 }
-
-/* the scrolling half: a long sync form must not take the rail off screen */
 .body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-panel) {
   flex: 1 1 auto;
   min-width: 0;
-  max-height: 68vh;
-  overflow-y: auto;
-  /* `overflow-y: auto` alone makes the x axis compute to `auto` too, so a
-     single too-wide control would give the dialog a horizontal scrollbar;
-     the sections are expected to fit the panel width. */
-  overflow-x: hidden;
+  max-height: min(68vh, 680px);
+  overflow: auto;
   padding-left: 20px;
 }
-
-
-/* Chrome Settings vocabulary also applies to the existing settings surface. */
-.dialog { background: var(--tv-bg); border: 1px solid var(--tv-border); border-radius: 12px; box-shadow: none; }
-.dialog :global(.bp6-dialog-header) { background: var(--tv-bg); border-bottom: 1px solid var(--tv-border); border-radius: 12px 12px 0 0; }
-.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) { border-right-color: var(--tv-border); }
-.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) :global(.bp6-tab) { border-radius: 18px; color: var(--tv-muted); font-weight: 500; }
-.body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) :global(.bp6-tab)[aria-selected='true'] { background: var(--tv-selected); color: var(--tv-accent); }
-
+@media (max-width: 650px) {
+  .body { padding: 10px; }
+  .body :global(.bp6-tabs.bp6-vertical) { flex-direction: column; }
+  .body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-list) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    min-width: 0;
+    padding: 0 0 8px;
+    border-right: 0;
+    border-bottom: 1px solid var(--tv-border);
+  }
+  .body :global(.bp6-tabs.bp6-vertical) > :global(.bp6-tab-panel) {
+    padding: 12px 0 0;
+    max-height: 60vh;
+  }
+}

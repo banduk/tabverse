@@ -406,3 +406,24 @@
 .todoapp label.toggleAll:focus:before {
   transform: rotate(90deg);
 }
+
+/* Shared chrome-native colours: the todo tool previously forced white cards. */
+.todoapp {
+  background: var(--tv-bg);
+  color: var(--tv-text);
+  border: 1px solid var(--tv-border);
+}
+.todoapp .newTodo,
+.todoapp .edit {
+  background: var(--tv-field);
+  color: var(--tv-text);
+  border-color: var(--tv-border);
+  box-shadow: none;
+}
+.todoapp input::placeholder { color: var(--tv-muted); }
+.todoapp .main, .todoapp .footer { border-color: var(--tv-border); }
+.todoapp .footer { color: var(--tv-muted); }
+.todoapp .footer::before { box-shadow: none; }
+.todoapp .todoList li { border-bottom-color: var(--tv-border); }
+.todoapp .todoList li button.content { color: var(--tv-text); }
+.todoapp .todoList li.completed button.content { color: var(--tv-muted); }

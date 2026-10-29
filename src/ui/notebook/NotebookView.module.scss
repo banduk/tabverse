@@ -52,3 +52,11 @@
   font-weight: 500;
   border-radius: global.$radius-card;
 }
+
+/* Empty states should not revert to white in Chrome dark mode. */
+.noticeContainer {
+  background: var(--tv-field);
+  color: var(--tv-muted);
+  font-weight: 400;
+  border-radius: 8px;
+}

@@ -64,3 +64,10 @@
   .rightSideContainer { display: none; }
 }
 
+/* Retained Blueprint controls in the inspector must inherit the theme. */
+.rightSideContainer :global(.bp6-button) {
+  color: var(--tv-text);
+}
+.rightSideContainer :global(.bp6-button:hover) {
+  color: var(--tv-accent);
+}

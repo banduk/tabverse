@@ -153,13 +153,18 @@ def run():
                 check("full manager loads and includes the existing tabs")
                 check("opening full manager preserves the user's existing content",
                       alpha.url.startswith("data:text/html"))
+                manager.set_viewport_size({"width": 1440, "height": 900})
                 manager.screenshot(path=str(OUTPUT / "manager-light.png"), full_page=True)
 
                 side.get_by_role("button", name="Salvos").click()
-                side.wait_for_timeout(600)
+                side.get_by_text("Espaços recentes").wait_for(timeout=20000)
+                check("saved spaces are refreshed when opening their view")
                 check("saved spaces view renders without error",
                       side.get_by_role("alert").count() == 0)
                 side.get_by_role("button", name="Abas").click()
+                side.set_viewport_size({"width": 410, "height": 800})
+                check("side panel fits its real narrow width without horizontal overflow",
+                    side.evaluate("document.documentElement.scrollWidth <= innerWidth"))
                 side.screenshot(path=str(OUTPUT / "panel-light.png"), full_page=True)
 
                 side.emulate_media(color_scheme="dark")
@@ -167,6 +172,22 @@ def run():
                 manager.emulate_media(color_scheme="dark")
                 manager.screenshot(path=str(OUTPUT / "manager-dark.png"), full_page=True)
                 check("light/dark UI screenshots captured from the packaged code")
+
+                # Catch the former forced-white todo surface in dark mode.
+                todo_colours = manager.evaluate("""() => {
+                  const item = document.querySelector('input[placeholder*="done"]');
+                  if (!item) throw new Error('Todo input not found');
+                  const root = item.closest('[class*="todoapp"]');
+                  if (!root) throw new Error('Todo card not found');
+                  return {
+                    background: getComputedStyle(root).backgroundColor,
+                    inputBackground: getComputedStyle(item).backgroundColor,
+                    inputText: getComputedStyle(item).color,
+                  };
+                }""")
+                check("todo card no longer forces white backgrounds in dark mode",
+                      todo_colours["background"] != "rgb(255, 255, 255)"
+                      and todo_colours["inputBackground"] != "rgb(255, 255, 255)")
 
                 side.evaluate("""async () =>
                     chrome.storage.session.remove('tabverse_local_vault_dek_v1')""")

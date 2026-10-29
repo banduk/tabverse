@@ -127,7 +127,7 @@ export function SidePanelView() {
   // Local IndexedDB writes do not emit Chrome tab events. Reload the saved
   // list when entering its view so newly saved workspaces appear immediately.
   useEffect(() => {
-    if (section !== 'saved' || locked) return;
+    if (section !== 'saved' || locked) return undefined;
     let active = true;
     void queryRecentSavedTabSpaces(8)
       .then((recent) => {

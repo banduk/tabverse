@@ -69,9 +69,7 @@
  * (ActiveTabSearch.module.scss), which is the same problem at the same size.
  */
 .searchRight {
-  position: absolute;
-  inset-block: 0;
-  right: 0;
+  position: static;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -200,3 +198,12 @@
   padding: 4px 0 8px 0;
   flex: none;
 }
+
+/* Blueprint positions the trailing action. Its contents stay in normal flow. */
+.toolbar :global(.bp6-input-action) {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  inset-block: 0;
+}
+.searchCount { background: var(--tv-selected); color: var(--tv-on-selected); }

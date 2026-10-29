@@ -12,8 +12,11 @@
 .noteToolContainer {
   display: flex;
   align-items: center;
-  height: 50px;
+  min-height: 50px;
+  height: auto;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
   flex: none;
 }
 
@@ -25,8 +28,10 @@
 }
 
 .filterContainer {
-  flex: 1;
-  margin-left: 12px;
+  flex: 1 1 100%;
+  min-width: 0;
+  margin-left: 0;
+  margin-bottom: 8px;
 }
 
 .collapseButton {

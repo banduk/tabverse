@@ -6,10 +6,14 @@
   align-items: center;
   min-height: 36px;
 }
-.right {
-  position: absolute;
+.container :global(.bp6-input-action) {
+  display: flex;
+  align-items: center;
   inset-block: 0;
-  right: 6px;
+  height: 100%;
+}
+.right {
+  position: static;
   display: flex;
   align-items: center;
   justify-content: flex-end;

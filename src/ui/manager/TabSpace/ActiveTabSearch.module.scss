@@ -19,10 +19,14 @@
 }
 .container :global(.bp6-input-group):focus-within { outline: 2px solid var(--tv-accent); outline-offset: 1px; }
 .container :global(.bp6-input-group) :global(.bp6-input):focus { outline: 0; box-shadow: none; }
-.right {
-  position: absolute;
+.container :global(.bp6-input-action) {
+  display: flex;
+  align-items: center;
+  height: 100%;
   inset-block: 0;
-  right: 6px;
+}
+.right {
+  position: static;
   display: flex;
   align-items: center;
   justify-content: flex-end;

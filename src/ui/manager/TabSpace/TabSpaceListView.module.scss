@@ -1,142 +1,49 @@
-@use '../../../global.scss';
-
-/*
- * The horizontal gutter lives on the column, not on one of its children.
- * It used to sit on .tabEntriesContainer, which meant the header card and the
- * capability warning lined up with nothing (the old fixed header had to carry
- * its own `margin-left: 24px` to compensate - see the sticky note further down).
- * One padding here keeps the header, the warning and the tab rows aligned by
- * construction, at any width.
- */
-.container {
-  margin-top: 20px;
-  margin-left: 2px;
-  margin-right: 22px;
-  padding: 0 24px;
-}
-
-.tabEntriesContainer {
-  padding: 0;
-}
-
-.bottomPlaceholder {
-  min-height: 200px;
-}
-
-.titleContainer {
-  display: flex;
-}
-
-.titleMain {
-  display: flex;
-  width: 100%;
-}
-
-.titleH1 {
-  width: 98%;
-  margin-left: 4px;
-}
-
-.titleButtons {
-  display: flex;
-  align-items: center;
-}
-
-.toolbarContainer {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 40px;
-}
-
-.toolbarLeftContainer {
-  display: flex;
-}
-
+/* Aligned title, search, toolbar and tab rows share the same gutter. */
+.container { margin: 0; padding: 22px 24px 38px; }
+.tabEntriesContainer { min-width: 0; }
+.bottomPlaceholder { min-height: 90px; }
+.titleContainer { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.titleMain { flex: 1 1 auto; min-width: 0; }
+.titleH1 { margin: 0; width: 100%; font-size: 23px; font-weight: 600; }
+.editableTextFullwidth { width: 100%; min-width: 0; }
+.titleButtons { display: flex; align-items: center; flex: 0 0 auto; gap: 4px; }
+.toolbarContainer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; min-height: 40px; }
+.toolbarLeftContainer, .toolbarRightContainer { display: flex; align-items: center; }
 .toolbarMiddleContainer {
-  background: global.$color-d;
-  color: global.$color-c;
-  padding: 4px 18px;
-  border-radius: 20px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  padding: 4px 10px; border-radius: 8px;
+  background: var(--tv-selected); color: var(--tv-on-selected);
+}
+.toolbarMiddleContainer .selectedTabsToolbarInfo { margin-right: 4px; }
+.header { background: var(--tv-bg); border-bottom: 1px solid var(--tv-border); padding: 12px 0 14px; margin-bottom: 14px; }
+.stickyOn { position: sticky; top: 0; z-index: 3; background: var(--tv-bg); }
+.tabInGroup { margin-bottom: 2px; }
+.tabIsActiveMatch { border-radius: 8px; outline: 2px solid var(--tv-accent); outline-offset: -2px; }
+.noMatchNotice { padding: 24px 4px; color: var(--tv-muted); text-align: center; }
+@container (max-width: 550px) {
+  .container { padding: 14px 12px 28px; }
+  .titleContainer { flex-wrap: wrap; }
 }
 
-.toolbarMiddleContainer .selectedTabsToolbarInfo {
-  margin-right: 18px;
+/* EditableText renders a real input even when idle; keep titles unboxed. */
+.titleH1 :global(.bp6-editable-text),
+.titleH1 :global(.bp6-editable-text-input) {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: inherit;
+  font-weight: inherit;
+  color: var(--tv-text);
+  line-height: 1.35;
 }
-
-.toolbarMiddleContainer .selectedTabsToolbarToolControl :global(.bp6-button) {
-  background-image: none;
-  background-color: global.$color-c;
-  color: global.$color-d;
+.titleH1 :global(.bp6-editable-text-input):focus {
+  background: var(--tv-field);
+  border-radius: 4px;
+  outline-offset: 2px;
 }
-
-.toolbarRightContainer {
-  display: flex;
-  text-align: start;
-}
-
-.editableTextFullwidth {
-  min-width: 100%;
-}
-
-.header {
-  border-radius: global.$radius-card;
-  background-color: rgba(global.$color-light-shade, 0.95);
-  padding: 16px 26px;
-  margin-bottom: 18px;
-  // box-shadow: 0 0 0 1px rgb(16 22 26 / 10%), 0 0 0 rgb(16 22 26 / 0%),
-  //   0 1px 1px rgb(16 22 26 / 20%);
-  transition: box-shadow width 150ms linear;
-}
-
-/*
- * Sticky, not fixed: a fixed element has to be given a width by hand, and the
- * old calc(50% - 242px) could not track the real column (it assumed the right
- * panel was half the window and ignored the sidebar), so the header drifted out
- * of line with the tab rows as the window narrowed. Sticky keeps the element
- * in flow, so it is always exactly as wide as the list below it.
- */
-.stickyOn {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.stickyOn .header {
-  box-shadow: 0 2px 10px -5px rgb(16 22 26 / 60%);
-}
-
-.tabInGroup {
-  margin-bottom: 2px;
-}
-
-/*
- * The row Enter would open, while the arrow keys are moving over the matches.
- * A ring rather than a background tint: the row has a favicon and two lines of
- * text, and a wash over both of them is what a selected row usually does - here
- * it only has to be findable at a glance, not look like a selection the browser
- * is about to act on.
- */
-.tabIsActiveMatch {
-  border-radius: 12px;
-  outline: 2px solid global.$color-main-brand;
-  outline-offset: -2px;
-}
-
-.noMatchNotice {
-  padding: 24px 4px;
-  color: global.$color-a;
-  text-align: center;
-}
-
-
-/* Dense, unboxed tab list with a restrained sticky header. */
-.container { margin: 0; padding: 24px 28px 36px; }
-.header { background: var(--tv-bg); border: 0; border-bottom: 1px solid var(--tv-border); border-radius: 0; padding: 8px 0 18px; box-shadow: none; margin: 0 0 14px; }
-.stickyOn { background: var(--tv-bg); }
-.stickyOn .header { box-shadow: none; }
-.titleH1 { margin: 0; font-size: 24px; font-weight: 600; }
-.toolbarMiddleContainer { background: var(--tv-selected); color: var(--tv-accent); border-radius: 18px; }
-.tabIsActiveMatch { border-radius: 8px; outline-color: var(--tv-accent); }
-

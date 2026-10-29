@@ -34,7 +34,7 @@ export function TabGroupBlock(props: ITabGroupBlockProps) {
             used to carry it is gone - one thing says it, not two */}
         <span
           className={classes.label}
-          style={{ backgroundColor: TAB_GROUP_COLORS_JS[group.color] }}
+          style={{ borderColor: TAB_GROUP_COLORS_JS[group.color] }}
         >
           <Tooltip content={group.title} placement="bottom">
             <span className={classes.title}>

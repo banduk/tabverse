@@ -1,11 +1,14 @@
 @use '../../../global.scss';
 
 .card {
-  margin-top: 6px;
-  padding: 8px 12px;
-  min-height: 54px;
-  border-radius: global.$radius-card;
+  margin-top: 0;
+  padding: 10px 12px;
+  min-height: 52px;
+  border-radius: 7px;
   box-shadow: none;
+  border-bottom: 1px solid var(--tv-border);
+  background: transparent;
+  color: var(--tv-text);
   /*
    * A row of [icon] [text] [buttons], laid out with flex rather than floats.
    * Floats put the text in line boxes that dodge them, and the text box here
@@ -52,7 +55,7 @@
 .dragHandle {
   margin-left: -8px;
   margin-right: 10px;
-  color: #666;
+  color: var(--tv-muted);
   cursor: grab;
 }
 
@@ -96,7 +99,8 @@
 }
 
 .tabTitle {
-  font-size: 1.2em;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* Chrome's pinned state, shown next to the title */
@@ -111,13 +115,13 @@
 }
 
 .tabUrl {
-  color: #888;
+  color: var(--tv-muted);
 }
 
 .previewHeaderContainer {
   padding: 8px;
-  border-bottom: 1px solid #ccc;
-  background-color: rgb(249, 249, 249);
+  border-bottom: 1px solid var(--tv-border);
+  background-color: var(--tv-alt);
   border-radius: global.$radius-card global.$radius-card 0px 0px;
 }
 
@@ -166,10 +170,10 @@
   align-items: center;
   justify-content: center;
   height: 280px;
-  border: 1px solid #f1f1f1;
+  border: 1px solid var(--tv-border);
   border-radius: 8px;
-  background-color: global.$color-light-shade;
-  color: global.$color-light-accent;
+  background-color: var(--tv-field);
+  color: var(--tv-muted);
   font-size: 14px;
   text-align: center;
 }
@@ -178,7 +182,7 @@
   border-radius: 8px;
   max-width: 500px;
   max-height: 500px;
-  border: 1px solid #f1f1f1;
+  border: 1px solid var(--tv-border);
 }
 
 .tabCardPopover :global(.bp6-popover) {
@@ -200,7 +204,7 @@
 
 .matchSnippet {
   font-size: 0.75rem;
-  color: var(--tv-text-muted, #666);
+  color: var(--tv-muted);
   margin-top: 2px;
   white-space: nowrap;
   overflow: hidden;
@@ -214,8 +218,8 @@
   font-size: 0.7rem;
   line-height: 1.6;
   border-radius: 999px;
-  background: global.$color-light-accent;
-  color: global.$color-c;
+  background: var(--tv-selected);
+  color: var(--tv-on-selected);
 }
 
 .matchSnippetLabel {
@@ -226,19 +230,10 @@
   font-weight: 600;
   line-height: 1.6;
   border-radius: 999px;
-  background: global.$color-light-accent;
-  color: global.$color-c;
+  background: var(--tv-selected);
+  color: var(--tv-on-selected);
 }
 
 
-/* Compact Chrome-like rows, showing actions without heavy cards or shadows. */
-.card {
-  margin-top: 0; min-height: 53px; padding: 10px 12px; border: 0;
-  border-radius: 7px; border-bottom: 1px solid var(--tv-border);
-  background: transparent; box-shadow: none; color: var(--tv-text);
-}
+
 .card:hover, .card:focus-within { background: var(--tv-hover); }
-.tabTitle { font-size: 13px; font-weight: 500; color: var(--tv-text); }
-.tabUrl { color: var(--tv-muted); font-size: 11px; }
-.dragHandle { color: var(--tv-muted); }
-

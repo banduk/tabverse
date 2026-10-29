@@ -20,7 +20,7 @@ export function SaveIndicator() {
   );
   const savedFromNow = (
     <Tooltip content={allSavedTimesContent}>
-      {`Saved ${fromNow(lastSavedTime)}`}
+      {lastSavedTime > 0 ? `Saved ${fromNow(lastSavedTime)}` : 'Not saved yet'}
     </Tooltip>
   );
   const allSavingContent = (

@@ -1,125 +1,53 @@
-@use '../../../global.scss';
-
-.container {
-  margin-top: 28px;
-  padding: 0px 48px 0px 48px;
-}
-
-.tabsContainer {
-  margin-bottom: 50px;
-}
-
-/*
- * Every tool's content is bounded, not just the chat: the pinned tool at the
- * top gets 45vh, the unpinned strip at the bottom 35vh. The bound travels as a
- * custom property so a view with its own scroll (the chat) can match it.
- */
-.pinnedContainer {
-  --tool-content-max-height: 45vh;
-}
-
-/*
- * Focus mode: the pinned tool takes almost the whole column (90vh) and the
- * unpinned strip is hidden. It comes after `.pinnedContainer` so its bound wins
- * over the base 45vh.
- */
-.pinnedFocused {
-  --tool-content-max-height: 90vh;
-}
-
-.unpinnedHidden {
-  display: none;
-}
-
-/* the pinned tool's own controls: the focus toggle, then unpin */
-.pinnedActions {
-  float: right;
+/* Tool inspector: all controls remain reachable with a compact tab layout. */
+.container { display: flex; flex-direction: column; gap: 18px; padding: 18px 14px; min-height: 0; color: var(--tv-text); }
+.tabsContainer { position: relative; display: flex; flex-direction: column; min-height: 0; gap: 8px; }
+.pinnedContainer { --tool-content-max-height: 48vh; }
+.pinnedFocused { --tool-content-max-height: 82vh; }
+.unpinnedContainer { --tool-content-max-height: 45vh; }
+.unpinnedHidden { display: none; }
+.pinnedActions { display: flex; justify-content: flex-end; gap: 4px; order: 0; }
+.floatRightButton { align-self: flex-end; }
+.bpTabs { min-width: 0; }
+.bpTabs :global(.bp6-tab-list) {
   display: flex;
+  flex-wrap: wrap;
   gap: 2px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--tv-border);
 }
-
-.unpinnedContainer {
-  --tool-content-max-height: 35vh;
+.bpTabs :global(.bp6-tab) {
+  color: var(--tv-muted);
+  background: transparent;
+  border-radius: 6px;
+  padding: 7px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
 }
-
+.bpTabs :global(.bp6-tab)[aria-selected='true'] {
+  color: var(--tv-on-selected);
+  background: var(--tv-selected);
+  font-weight: 600;
+}
+.bpTabs :global(.bp6-tab):not([aria-selected='true']):not([aria-disabled='true']):hover {
+  background: var(--tv-hover);
+  color: var(--tv-text);
+}
+.bpTabs :global(.bp6-tab-indicator-wrapper) { display: none; }
 .pinnedContainer :global(.bp6-tab-panel),
 .unpinnedContainer :global(.bp6-tab-panel) {
-  max-height: var(--tool-content-max-height);
-  /* the panel is the frame: it bounds the height and never scrolls itself, so
-     a tool can keep its header fixed and scroll only its content */
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  max-height: var(--tool-content-max-height);
+  overflow: hidden;
 }
-
-/*
- * The loader wraps every tool in one plain div between the panel and the tool's
- * own root. It has to pass the column down, or the tool's fixed-header layout
- * has no height to work against.
- */
 .pinnedContainer :global(.bp6-tab-panel) > div,
 .unpinnedContainer :global(.bp6-tab-panel) > div {
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
   min-height: 0;
+  flex: 1 1 auto;
 }
-
-.card {
-  padding: 8px 12px;
-  width: 100%;
-}
-
-.wrapText {
-  overflow-wrap: anywhere;
-}
-
-.floatRightButton {
-  float: right;
-}
-
-.bpTabs :global(.bp6-tab) {
-  padding: 4px 12px;
-  border-radius: global.$radius-card;
-  font-weight: bold;
-  color: global.$color-text;
-  transition: all 200ms ease-in;
-}
-
-.bpTabs :global(.bp6-tab)[aria-selected='true'] {
-  background-color: global.$color-main-brand !important;
-  color: global.$color-c;
-  padding: 4px 12px;
-  border-radius: global.$radius-card;
-  font-weight: bold;
-}
-
-.bpTabs :global(.bp6-tab-indicator-wrapper) {
-  display: none;
-}
-
-.bpTabs
-  :global(.bp6-tab):not([aria-selected='true']):not(
-    [aria-disabled='true']
-  ):hover {
-  background-color: #ddd !important;
-  color: inherit;
-}
-
-
-/* Quiet inspector with understated, underlined tabs. */
-.container { margin: 0; padding: 26px 18px; color: var(--tv-text); }
-.tabsContainer { margin-bottom: 24px; }
-.bpTabs :global(.bp6-tab) {
-  color: var(--tv-muted); background: transparent !important; border-radius: 0;
-  padding: 8px 7px; font-size: 12px; font-weight: 500;
-}
-.bpTabs :global(.bp6-tab)[aria-selected='true'] {
-  color: var(--tv-accent); border-bottom: 2px solid var(--tv-accent);
-  border-radius: 0; background: transparent !important; font-weight: 600; padding: 8px 7px 6px;
-}
-.bpTabs :global(.bp6-tab):not([aria-selected='true']):not([aria-disabled='true']):hover {
-  color: var(--tv-text); background: var(--tv-hover) !important;
-}
-.bpTabs :global(.bp6-tab-list) { flex-wrap: wrap; border-bottom: 1px solid var(--tv-border); }
-
+.card { width: 100%; padding: 8px 10px; }
+.wrapText { overflow-wrap: anywhere; }

@@ -1,147 +1,33 @@
-@use '../../../global.scss';
-
-.sidebarComponent {
-  position: relative;
-  background-color: global.$color-light-shade;
-  border-radius: 20px;
-  margin-bottom: 18px;
-  padding: 8px 18px;
-  box-shadow: 0px 0px 5px -1px global.$color-dark-shade;
-}
-
-.sidebarComponent .edge {
-  position: absolute;
-  left: calc(100% - 18px);
-  top: -30px;
-  min-width: 30px;
-  height: calc(100% + 60px);
-  background-image: linear-gradient(
-    90deg,
-    global.$color-light-shade,
-    rgb(245, 246, 248)
-  );
-}
-
-.sidebarComponent .edge::before {
-  content: '';
-  width: 30px;
-  height: 30px;
-  /* the rail's own colour, so the corner blends into it whatever the tabverse
-     chose (see SidebarContainer + sidebarColor.ts); the fallback is the
-     default rail slate */
-  background-color: var(--sidebar-color, #{global.$sidebar-background-color});
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  border-bottom-right-radius: 30px;
-}
-
-.sidebarComponent .edge::after {
-  content: '';
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  background-color: var(--sidebar-color, #{global.$sidebar-background-color});
-  top: calc(100% - 30px);
-  left: 0px;
-  border-top-right-radius: 30px;
-}
-
-.sidebarComponent.active .edge {
-  display: block;
-}
-
-.sidebarComponent.inactive .edge {
-  display: none;
-}
-
+/* Flat Chrome Settings-like navigation, no legacy colored-card cutouts. */
+.sidebarComponent { position: relative; margin: 0 0 3px; background: transparent; }
+.sidebarComponent .edge { display: none; }
 .sidebarComponent .header {
-  /* a real <button> now (it switches the route): reset the button chrome so
-     the entry looks exactly as it did as a div. padding is set in full because
-     the UA's 1px 6px would otherwise indent the label. */
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 0 0 0 10px;
+  min-height: 40px;
+  padding: 9px 12px;
   border: 0;
-  background: none;
-  color: inherit;
-  font-family: inherit;
-  text-align: start;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--tv-muted);
+  font: 500 13px/1.4 Arial, Helvetica, system-ui, sans-serif;
+  text-align: left;
   cursor: pointer;
-  line-height: 42px;
-  font-size: 1.2em;
-  font-weight: bold;
+  overflow: hidden;
 }
-
-.sidebarComponent.active .header {
-  // background-image: linear-gradient(270deg, #ced9e0, global.$color-b);
-  // background-image: linear-gradient(270deg, hsla(0, 0%, 100%, 0), #ced9e0);
-  border-radius: 3px;
-}
-
-.sidebarComponent.inactive {
-  opacity: 0.65;
-  cursor: pointer;
-  transition: opacity 150ms ease-in-out;
-  z-index: 5;
-}
-
-.sidebarComponent.inactive:hover {
-  opacity: 1;
-}
-
-.sidebarComponent .content {
-  transition: all 150ms ease-in-out;
-}
-
-.sidebarHeaderContainer :global(.bp6-icon) {
-  margin-right: 12px;
-}
-
-/*
- * Collapsed rail: the entry keeps its card decoration (rounded, shadowed,
- * active/inactive opacity) but becomes a square icon button, since the label
- * lives in the tooltip instead.
- */
-.sidebarComponent.collapsed {
-  padding: 4px;
-  margin-bottom: 12px;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-}
-
+.sidebarComponent .header:hover { background: var(--tv-hover); color: var(--tv-text); }
+.sidebarComponent.active .header { background: var(--tv-selected); color: var(--tv-on-selected); font-weight: 600; }
 .sidebarComponent.collapsed .header {
-  padding-left: 0;
-  line-height: 44px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
+  padding: 8px;
+  border-radius: 12px;
 }
-
-.sidebarComponent.collapsed .railIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.sidebarComponent .content { min-width: 0; }
+.sidebarHeaderContainer { display: flex; align-items: center; min-width: 0; gap: 10px; }
+.sidebarHeaderContainer :global(.bp6-icon) { flex: 0 0 auto; }
+.railIcon { display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 780px) {
+  .sidebarComponent:not(.collapsed) .header { padding: 8px; justify-content: center; }
+  .sidebarComponent:not(.collapsed) .header > div { width: 24px; white-space: nowrap; overflow: hidden; }
 }
-
-
-/* Flat navigational rows in place of floating, shadowed cards. */
-.sidebarComponent, .sidebarComponent.collapsed {
-  position: relative; background: transparent; box-shadow: none; border-radius: 0;
-  margin: 0 0 3px; padding: 0; opacity: 1;
-}
-.sidebarComponent .edge, .sidebarComponent.active .edge { display: none; }
-.sidebarComponent .header, .sidebarComponent.collapsed .header {
-  display: flex; width: 100%; align-items: center; min-height: 40px; line-height: 1.35;
-  padding: 9px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; color: var(--tv-muted);
-  transition: background-color 100ms ease; white-space: nowrap; text-align: left;
-}
-.sidebarComponent .header:hover, .sidebarComponent.inactive:hover .header { background: var(--tv-hover); color: var(--tv-text); }
-.sidebarComponent.active .header { background: var(--tv-selected); color: var(--tv-accent); font-weight: 600; }
-.sidebarComponent.inactive { opacity: 1; }
-.sidebarComponent.collapsed { justify-content: center; }
-.sidebarComponent.collapsed .header { padding: 9px; justify-content: center; border-radius: 12px; }
-.sidebarHeaderContainer :global(.bp6-icon) { margin-right: 9px; }
-

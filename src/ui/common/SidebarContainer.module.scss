@@ -1,97 +1,33 @@
-@use '../../global.scss';
-
-$sidebar-width-expanded: 320px;
-$sidebar-width-collapsed: 72px;
-$transition-time: 200ms;
-
-/*
- * The sidebar width lives in ONE place: the `--sidebar-width` custom property
- * set on .topContainer. Both the fixed sidebar and the offset of the content
- * column read it, so they cannot drift apart (they used to: the content column
- * was `margin-left: 320px; width: 100%`, which overflows the viewport by the
- * sidebar width and pushed the right hand panel off screen).
- */
-.topContainer {
-  display: flex;
-  --sidebar-width: #{$sidebar-width-expanded};
-}
-
-.topContainer.collapsed {
-  --sidebar-width: #{$sidebar-width-collapsed};
-}
-
+/* A single width variable drives the sidebar and workspace offsets. */
+.topContainer { --sidebar-width: 244px; display: flex; }
+.topContainer.collapsed { --sidebar-width: 60px; }
 .leftContainer {
-  box-sizing: border-box;
-  height: 100vh;
   position: fixed;
+  inset: 0 auto 0 0;
+  box-sizing: border-box;
   z-index: 1;
-  top: 0;
-  left: 0;
-  /* `--sidebar-color` is the current tabverse's colour, set by the container;
-     the fallback is the default rail slate for a caller with no store. */
-  background-color: var(
-    --sidebar-color,
-    #{global.$sidebar-background-color}
-  );
-  overflow-x: hidden;
-  padding: 12px;
   width: var(--sidebar-width);
-  transition: width $transition-time ease-in-out;
+  height: 100vh;
+  padding: 14px 10px 72px;
+  background: var(--tv-alt);
+  border-right: 1px solid var(--tv-border);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
-
 .rightContainer {
   box-sizing: border-box;
   margin-left: var(--sidebar-width);
   width: calc(100% - var(--sidebar-width));
   min-width: 0;
-  transition: margin-left $transition-time ease-in-out;
 }
-
-/*
- * The collapse control, pinned to the top of the rail.
- *
- * No background, as asked: the glyph itself has to carry the contrast against
- * the brand-blue rail. Blueprint paints icons with `fill` (its own
- * `.bp6-icon > svg:not([fill])` rule), so setting `color` on the button is not
- * the last word - the `fill` is set here too, on a selector that outranks
- * Blueprint's (0,3,1 vs 0,2,1).
- */
-.collapseToggle {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  z-index: 3;
-}
-
+.collapseToggle { position: absolute; top: 13px; right: 8px; z-index: 3; }
 .collapseToggle :global(.bp6-button) {
-  min-width: 30px;
-  min-height: 30px;
-  color: global.$color-on-brand;
-  background: none;
-  box-shadow: none;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  color: var(--tv-muted);
+  background: transparent;
 }
-
-.collapseToggle :global(.bp6-button) :global(.bp6-icon) > svg {
-  fill: global.$color-on-brand;
-}
-
-.collapseToggle :global(.bp6-button):hover,
-.collapseToggle :global(.bp6-button):focus {
-  color: #ffffff;
-}
-
-.collapseToggle :global(.bp6-button):hover :global(.bp6-icon) > svg,
-.collapseToggle :global(.bp6-button):focus :global(.bp6-icon) > svg {
-  fill: #ffffff;
-}
-
-
-/* Compact Chrome-style navigation rail, without the per-workspace rainbow fill. */
-.topContainer { --sidebar-width: 244px; }
-.topContainer.collapsed { --sidebar-width: 60px; }
-.leftContainer { background: var(--tv-alt); border-right: 1px solid var(--tv-border); padding: 16px 10px 68px; overflow-y: auto; overflow-x: hidden; }
-.collapseToggle :global(.bp6-button) { background: transparent; color: var(--tv-muted); }
-.collapseToggle :global(.bp6-button) :global(.bp6-icon) > svg,
-.collapseToggle :global(.bp6-button):hover :global(.bp6-icon) > svg { fill: var(--tv-muted); }
+.collapseToggle :global(.bp6-button) :global(.bp6-icon) > svg { fill: currentColor; }
 .collapseToggle :global(.bp6-button):hover { color: var(--tv-text); background: var(--tv-hover); }
 

@@ -176,14 +176,11 @@ export function SidePanelView() {
       ),
     [saved, matches],
   );
-  const sortedGroupIds = useMemo(() => {
-    const found = Array.from(new Set(displayedTabs.map((tab) => tab.groupId)));
-    return found.sort((a, b) => {
-      if (a === NO_GROUP) return 1;
-      if (b === NO_GROUP) return -1;
-      return a - b;
-    });
-  }, [displayedTabs]);
+  // Preserve the first occurrence of each group in Chrome's tab order.
+  const sortedGroupIds = useMemo(
+    () => Array.from(new Set(displayedTabs.map((tab) => tab.groupId))),
+    [displayedTabs],
+  );
 
   async function openManager(): Promise<void> {
     try {
@@ -244,9 +241,14 @@ export function SidePanelView() {
     <main className="tv-side-shell">
       <header className="tv-side-header">
         <div className="tv-side-brand">
-          <span className="tv-side-brand-icon" aria-hidden="true">
-            ▦
-          </span>
+          <img
+            className="tv-side-brand-icon"
+            src="icons/icon48.png"
+            alt=""
+            aria-hidden="true"
+            width="27"
+            height="27"
+          />
           <strong>Tabverse</strong>
         </div>
         <button

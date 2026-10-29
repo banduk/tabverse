@@ -11,14 +11,14 @@
   align-items: baseline;
   justify-content: space-between;
   padding: 12px 14px 6px 14px;
-  color: global.$color-a;
+  color: var(--tv-muted);
   font-size: 12px;
 }
 
 .headerTitle {
   font-weight: 600;
   font-size: 14px;
-  color: global.$color-d;
+  color: var(--tv-on-selected);
 }
 
 .createContainer {
@@ -42,15 +42,15 @@
 .listContainer {
   flex: 1;
   overflow-y: auto;
-  border-top: 1px solid global.$color-e;
+  border-top: 1px solid var(--tv-border);
   max-height: 420px;
 }
 
 .listHeading {
   position: sticky;
   top: 0;
-  background-color: global.$color-c;
-  color: global.$color-a;
+  background-color: var(--tv-alt);
+  color: var(--tv-muted);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -62,11 +62,11 @@
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  border-bottom: 1px solid global.$color-light-shade;
+  border-bottom: 1px solid var(--tv-border);
 }
 
 .row:hover {
-  background-color: global.$color-light-shade;
+  background-color: var(--tv-hover);
 }
 
 /*
@@ -104,7 +104,7 @@
 .rowMeta {
   display: flex;
   gap: 6px;
-  color: global.$color-a;
+  color: var(--tv-muted);
   font-size: 11px;
   white-space: nowrap;
   overflow: hidden;
@@ -112,19 +112,19 @@
 }
 
 .rowBadge {
-  color: global.$color-d;
+  color: var(--tv-on-selected);
   font-weight: 600;
 }
 
 .notice {
   padding: 14px;
-  color: global.$color-a;
+  color: var(--tv-muted);
   font-style: italic;
 }
 
 .status {
   border-top: 1px solid global.$color-light-shade;
-  color: global.$color-a;
+  color: var(--tv-muted);
   font-size: 11px;
   padding: 6px 14px;
 }

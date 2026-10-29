@@ -9,8 +9,8 @@ body {
   margin: 0;
   overflow: hidden;
   // the popup is a white surface like the cards in the app, not a grey page
-  background-color: #fff;
-  color: global.$color-text;
+  background-color: var(--tv-bg);
+  color: var(--tv-text);
 }
 
 :focus {

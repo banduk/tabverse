@@ -1,190 +1,151 @@
-// The shared look of every control in the app, for both pages that render one:
-// the manager page and the toolbar popup. It lives in one file because the two
-// pages drifted apart once already - the popup was built with default
-// Blueprint components and read as a different application.
-//
-// This is a plain stylesheet, not a CSS module, so the selectors below are
-// written plain: `:global(...)` here would never be stripped (only
-// `*.module.scss` files go through that transform), and a selector like
-// `:global(.bp6-button)` is invalid CSS that browsers drop on the floor - which
-// is how these rules used to be written in manager.scss without ever applying.
-
-@use 'sass:color';
-@use '../global.scss';
-
-/* one radius for everything clickable, one for everything that holds text */
-.bp6-button {
-  border-radius: 18px;
-}
-
-.bp6-input,
-.bp6-tag-input {
-  border-radius: 28px;
-  box-shadow: none;
-  border: 1px solid global.$color-e;
-  background-color: #fff;
-  color: global.$color-text;
-}
-
-.bp6-input:focus,
-.bp6-tag-input:focus {
-  border-color: global.$color-d;
-  box-shadow: 0 0 0 1px global.$color-d;
-}
-
-.bp6-callout {
-  border-radius: 18px;
-}
-
-.bp6-tag {
-  border-radius: 8px;
-  font-size: 0.75em;
-}
-
-.bp6-control.bp6-checkbox .bp6-control-indicator {
-  border-radius: 8px;
-}
-
-.bp6-card.bp6-interactive:hover {
-  box-shadow:
-    0 2px 4px rgb(16 22 26 / 20%),
-    0 8px 24px rgb(16 22 26 / 20%);
-}
-
-/**
- * The primary action of a view or a dialog: a solid brand pill.
- *
- * The hover deliberately does not repaint the button - the fill is already the
- * strongest thing on the page, and a glow around it turns every dialog into a
- * call to action. It only darkens a little.
- */
-.tv-primary-button.bp6-button {
-  background-color: global.$color-d;
-  color: global.$color-c;
-  background-image: none;
-  box-shadow: none;
-}
-
-.tv-primary-button.bp6-button .bp6-icon {
-  color: global.$color-c;
-}
-
-.tv-primary-button.bp6-button:hover,
-.tv-primary-button.bp6-button:focus {
-  background-color: color.adjust(global.$color-d, $lightness: -8%);
-  color: global.$color-c;
-  box-shadow: none;
-}
-
-.tv-primary-button.bp6-button:hover .bp6-icon,
-.tv-primary-button.bp6-button:focus .bp6-icon {
-  color: global.$color-c;
-}
-
-/**
- * An icon-only control: the icon carries the meaning and the brand colour, and
- * the background only appears when the pointer is over it. The tab rows, the
- * saved tabverse list and the popup all use this one, so "bookmark this tab",
- * "close this tab" and "save and close the tabverse" are visibly the same
- * control.
- */
-.tv-icon-button.bp6-button {
-  min-width: 30px;
-  min-height: 30px;
-  padding: 0;
-  border-radius: 18px;
-  background-color: transparent;
-  background-image: none;
-  box-shadow: none;
-  color: global.$color-d;
-}
-
-.tv-icon-button.bp6-button .bp6-icon {
-  color: global.$color-d;
-}
-
-.tv-icon-button.bp6-button:hover,
-.tv-icon-button.bp6-button:focus {
-  background-color: global.$color-light-shade;
-  color: global.$color-d;
-  box-shadow: none;
-}
-
-.tv-icon-button.bp6-button:hover .bp6-icon,
-.tv-icon-button.bp6-button:focus .bp6-icon {
-  color: global.$color-d;
-}
-
-.tv-icon-button.bp6-button:disabled {
-  opacity: 0.4;
-}
-
-/**
- * A control that is busy: the icon spins until the work is done. Used by the
- * sync button (bottom nav) and the sync dialog's own indicator, so "syncing
- * right now" looks the same wherever it is shown.
- */
-.tv-syncing .bp6-icon,
-.tv-syncing.bp6-icon {
-  animation: tv-spin 1.1s linear infinite;
-}
-
-@keyframes tv-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tv-syncing .bp6-icon,
-  .tv-syncing.bp6-icon {
-    animation-duration: 3s;
-  }
-}
-
-
-/* Chrome-native foundation: system typography, flat surfaces, and keyboard focus. */
+/* Shared Chrome-like design system. No remote assets; one set of semantic tokens
+ * for both themes and every Blueprint-backed extension page. */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
   --tv-bg: #ffffff;
   --tv-alt: #f8fafd;
+  --tv-surface: #ffffff;
   --tv-field: #f1f3f7;
   --tv-text: #202124;
   --tv-muted: #5f6368;
-  --tv-border: #e8eaed;
+  --tv-border: #dfe3ea;
   --tv-hover: #f1f3f4;
   --tv-selected: #e8f0fe;
   --tv-accent: #0b57d0;
+  --tv-accent-text: #ffffff;
+  --tv-on-selected: #174ea6;
+  --tv-danger: #b3261e;
+  --tv-danger-bg: #fce8e6;
+  --tv-warning-bg: #fff4db;
+  --tv-shadow: 0 6px 22px rgb(32 33 36 / 12%);
   font-family: Arial, Helvetica, system-ui, sans-serif;
 }
-body { font-family: Arial, Helvetica, system-ui, sans-serif; background: var(--tv-bg); color: var(--tv-text); font-size: 13px; }
-.bp6-button { border-radius: 18px; background: transparent; background-image: none; box-shadow: none; color: var(--tv-text); }
-.bp6-button:hover:not(:disabled), .bp6-button:focus-visible:not(:disabled) { background: var(--tv-hover); box-shadow: none; }
-.bp6-button.bp6-intent-primary, .tv-primary-button.bp6-button {
-  background: var(--tv-accent); background-image: none; color: #fff; border: 0; box-shadow: none;
-}
-.bp6-button.bp6-intent-primary:hover:not(:disabled), .tv-primary-button.bp6-button:hover:not(:disabled) {
-  background: #0849ad; color: #fff; box-shadow: none;
-}
-.bp6-input, .bp6-tag-input { border-radius: 20px; border: 1px solid transparent; background: var(--tv-field); color: var(--tv-text); box-shadow: none; }
-.bp6-input:focus, .bp6-tag-input:focus { border-color: var(--tv-accent); box-shadow: none; }
-.bp6-card { border-radius: 8px; box-shadow: none; background: var(--tv-bg); color: var(--tv-text); }
-.bp6-callout { border-radius: 8px; }
-.bp6-tag { border-radius: 5px; }
-.bp6-control.bp6-checkbox .bp6-control-indicator { border-radius: 3px; }
-.bp6-dialog, .bp6-popover, .bp6-menu { border: 1px solid var(--tv-border); border-radius: 12px; box-shadow: 0 8px 24px #2021241a; background: var(--tv-bg); color: var(--tv-text); }
-.bp6-dialog-header { background: var(--tv-bg); color: var(--tv-text); box-shadow: none; border-bottom: 1px solid var(--tv-border); }
-:focus-visible { outline: 2px solid var(--tv-accent) !important; outline-offset: 2px; }
+
 @media (prefers-color-scheme: dark) {
-  :root { --tv-bg: #292d35; --tv-alt: #262a32; --tv-field: #3a404a; --tv-text: #e8eaed; --tv-muted: #abb4c0; --tv-border: #444a55; --tv-hover: #3c4654; --tv-selected: #29466b; --tv-accent: #8ab4f8; }
-  .bp6-button.bp6-intent-primary, .tv-primary-button.bp6-button { color: #152b45; }
-  .bp6-button.bp6-intent-primary:hover:not(:disabled), .tv-primary-button.bp6-button:hover:not(:disabled) { background: #a8c7fa; color: #152b45; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bp6-button, .bp6-tab, .bp6-card { animation: none !important; transition: none !important; }
+  :root {
+    color-scheme: dark;
+    --tv-bg: #202124;
+    --tv-alt: #292c32;
+    --tv-surface: #30343b;
+    --tv-field: #383d45;
+    --tv-text: #e8eaed;
+    --tv-muted: #bdc1c6;
+    --tv-border: #50545c;
+    --tv-hover: #3a4049;
+    --tv-selected: #29486f;
+    --tv-accent: #8ab4f8;
+    --tv-accent-text: #172b46;
+    --tv-on-selected: #d2e3fc;
+    --tv-danger: #f28b82;
+    --tv-danger-bg: #4b2b2d;
+    --tv-warning-bg: #4a3b23;
+    --tv-shadow: 0 6px 22px rgb(0 0 0 / 34%);
+  }
 }
 
+html, body {
+  margin: 0;
+  background: var(--tv-bg);
+  color: var(--tv-text);
+  font: 13px/1.5 Arial, Helvetica, system-ui, sans-serif;
+}
+
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--tv-accent); outline-offset: 2px; }
+:disabled { cursor: not-allowed; }
+
+/* Blueprint remains in the project for functionality, not visual appearance. */
+.bp6-button, .bp6-button.bp6-minimal {
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+  color: var(--tv-text);
+  min-height: 32px;
+}
+.bp6-button .bp6-icon { color: inherit; }
+.bp6-button:hover:not(:disabled),
+.bp6-button:focus-visible:not(:disabled),
+.bp6-button.bp6-minimal:hover:not(:disabled) {
+  background: var(--tv-hover);
+  background-image: none;
+  box-shadow: none;
+  color: var(--tv-text);
+}
+.bp6-button.bp6-intent-primary, .tv-primary-button.bp6-button {
+  background: var(--tv-accent);
+  color: var(--tv-accent-text);
+  border-radius: 18px;
+}
+.bp6-button.bp6-intent-primary:hover:not(:disabled),
+.tv-primary-button.bp6-button:hover:not(:disabled) {
+  background: var(--tv-accent);
+  filter: brightness(0.94);
+  color: var(--tv-accent-text);
+}
+.bp6-input, .bp6-tag-input, .bp6-html-select select, .bp6-text-area {
+  border: 1px solid var(--tv-border);
+  border-radius: 8px;
+  background: var(--tv-field);
+  background-image: none;
+  box-shadow: none;
+  color: var(--tv-text);
+}
+.bp6-input::placeholder, .bp6-text-area::placeholder { color: var(--tv-muted); opacity: 1; }
+.bp6-input:focus, .bp6-tag-input:focus, .bp6-text-area:focus {
+  border-color: var(--tv-accent);
+  background: var(--tv-field);
+  box-shadow: 0 0 0 1px var(--tv-accent);
+  color: var(--tv-text);
+}
+.bp6-card, .bp6-callout, .bp6-non-ideal-state {
+  background: var(--tv-surface);
+  color: var(--tv-text);
+  border-radius: 8px;
+  box-shadow: none;
+}
+.bp6-card.bp6-interactive:hover { background: var(--tv-hover); box-shadow: none; }
+.bp6-dialog, .bp6-dialog-header, .bp6-popover, .bp6-menu {
+  color: var(--tv-text);
+  background: var(--tv-surface);
+}
+.bp6-dialog, .bp6-popover {
+  border: 1px solid var(--tv-border);
+  border-radius: 12px;
+  box-shadow: var(--tv-shadow);
+}
+.bp6-dialog-header { border-bottom: 1px solid var(--tv-border); border-radius: 12px 12px 0 0; box-shadow: none; }
+.bp6-menu-item, .bp6-menu-header h6, .bp6-popover-content { color: var(--tv-text); }
+.bp6-menu-item:hover, .bp6-menu-item.bp6-active { background: var(--tv-hover); color: var(--tv-text); }
+.bp6-divider, .bp6-menu-divider { border-color: var(--tv-border); }
+.bp6-tab { color: var(--tv-muted); }
+.bp6-tab[aria-selected="true"] { color: var(--tv-accent); }
+.bp6-tag { border-radius: 5px; background: var(--tv-field); color: var(--tv-text); }
+.bp6-control.bp6-checkbox .bp6-control-indicator { border-radius: 3px; }
+.bp6-editable-text { color: var(--tv-text); }
+.bp6-editable-text-input { color: var(--tv-text); background: var(--tv-field); }
+
+/* Shared toolbar buttons (saved tabs, notes, popup, synchronization). */
+.tv-icon-button.bp6-button {
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  color: var(--tv-muted);
+  background: transparent;
+}
+.tv-icon-button.bp6-button:hover,
+.tv-icon-button.bp6-button:focus-visible {
+  background: var(--tv-hover);
+  color: var(--tv-text);
+}
+.tv-icon-button.bp6-button .bp6-icon { color: inherit; }
+.tv-icon-button.bp6-button:disabled { opacity: 0.45; }
+
+.tv-syncing .bp6-icon, .tv-syncing.bp6-icon { animation: tv-spin 1.1s linear infinite; }
+@keyframes tv-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation-duration: 0.01ms !important; }
+}

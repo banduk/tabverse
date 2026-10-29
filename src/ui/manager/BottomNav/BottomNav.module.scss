@@ -1,49 +1,26 @@
-@use '../../../global.scss';
-
+/* Fixed footer aligned to the same 244/60px navigation rail. */
 .container {
   position: fixed;
-  bottom: 0px;
-  left: -1px;
-  /* the rail's width, the same custom property the sidebar itself uses */
-  width: var(--sidebar-width, 320px);
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-width, 244px);
+  border-top: 1px solid var(--tv-border);
+  background: var(--tv-alt);
+  z-index: 4;
 }
-
-/* a touch darker than the rail, whatever colour the tabverse chose; the
-   fallback is the default rail slate */
 .navbar {
-  background-color: color-mix(
-    in srgb,
-    var(--sidebar-color, #{global.$sidebar-background-color}),
-    black 8%
-  ) !important;
+  background: var(--tv-alt);
+  box-shadow: none;
+  border: 0;
 }
-
 .navbar :global(.bp6-button) {
-  border-radius: 16px;
+  color: var(--tv-muted);
+  border-radius: 8px;
+  background: transparent;
 }
-
-/* collapsed rail: the same bar and buttons, stacked */
-.rail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 6px 0;
+.navbar :global(.bp6-button):hover { background: var(--tv-hover); color: var(--tv-text); }
+.rail { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; }
+.rail :global(.bp6-button) { width: 42px; height: 36px; }
+@media (max-width: 780px) {
+  .navbar :global(.bp6-navbar-group) { flex-wrap: wrap; justify-content: center; }
 }
-
-.rail :global(.bp6-button) {
-  width: 44px;
-  height: 40px;
-  border-radius: 12px;
-}
-
-
-/* Fixed footer shares the navigation rail's neutral background. */
-.container { left: 0; }
-.navbar { background: var(--tv-alt) !important; border-top: 1px solid var(--tv-border); box-shadow: none; }
-.navbar :global(.bp6-button) {
-  color: var(--tv-muted) !important; background: transparent !important;
-  box-shadow: none !important; border-radius: 18px;
-}
-.navbar :global(.bp6-button):hover { background: var(--tv-hover) !important; color: var(--tv-text) !important; }
-

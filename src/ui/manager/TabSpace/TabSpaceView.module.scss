@@ -1,73 +1,44 @@
-@use '../../../global.scss';
-
-.container {
-  display: flex;
-  align-items: stretch;
-}
-
+/* Three-column manager, with an accessible small-window tool switcher. */
+.container { height: 100vh; min-height: 0; display: flex; flex-direction: column; }
+.columns { display: flex; flex: 1 1 auto; min-width: 0; min-height: 0; }
 .mainContainer {
-  /*
-   * The tab list takes what is left. `min-width: 0` matters: a flex item's
-   * default min-width is its content, which is what made this column refuse to
-   * shrink and push the right panel off screen.
-   */
   flex: 1 1 0;
   min-width: 0;
-  overflow-y: auto;
-  height: 100vh;
+  height: 100%;
+  overflow: auto;
+  background: var(--tv-bg);
 }
-
 .rightSideContainer {
-  /*
-   * The right panel used to be a hard `width: 50%`, so it kept its share while
-   * the window narrowed and the tab rows were squeezed instead (and, with the
-   * sidebar offset bug, it was clipped off the right edge entirely).
-   * `flex: 0 1 45%` keeps its share of a wide window but lets it give space
-   * back when there is not enough, down to the floor below; below that floor
-   * it is simply too narrow to be useful, so `min-width: 0` lets the main
-   * column win instead of overflowing the page.
-   */
-  flex: 0 1 45%;
-  min-width: 300px;
-  overflow-y: auto;
-  background-color: global.$color-light-shade;
-  box-shadow: 1px 0px 1px 0px inset #bbb;
-  height: 100vh;
+  flex: 0 0 clamp(300px, 30%, 380px);
+  min-width: 0;
+  height: 100%;
+  overflow: auto;
+  background: var(--tv-alt);
+  border-left: 1px solid var(--tv-border);
 }
+.mobileSwitch { display: none; }
 
-/* not enough room for a useful panel: the tab list is the priority.
- *
- * This asks the content column, not the window (`container-type` on
- * `.content`, ManagerView.module.scss): with the console panel open the window
- * is wide but this column is not, and the tools panel has to give way rather
- * than leave the tab list a sliver.
- */
-@container (max-width: 900px) {
-  .rightSideContainer {
-    flex: 0 1 40%;
-    min-width: 0;
+@container (max-width: 790px) {
+  .mobileSwitch {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--tv-alt);
+    border-bottom: 1px solid var(--tv-border);
   }
-}
-
-
-/* Right inspector is intentionally narrow, as in Chrome's bookmark manager. */
-.container { height: 100vh; }
-.mainContainer { background: var(--tv-bg); }
-.rightSideContainer {
-  flex: 0 0 340px; width: 340px; max-width: 340px; min-width: 0;
-  background: var(--tv-alt); box-shadow: none; border-left: 1px solid var(--tv-border);
-}
-@container (max-width: 950px) {
-  .rightSideContainer { flex: 0 1 300px; max-width: 300px; }
-}
-@container (max-width: 740px) {
-  .rightSideContainer { display: none; }
-}
-
-/* Retained Blueprint controls in the inspector must inherit the theme. */
-.rightSideContainer :global(.bp6-button) {
-  color: var(--tv-text);
-}
-.rightSideContainer :global(.bp6-button:hover) {
-  color: var(--tv-accent);
+  .mobileSwitch button {
+    border: 0;
+    border-radius: 18px;
+    min-height: 32px;
+    padding: 6px 14px;
+    background: transparent;
+    color: var(--tv-muted);
+    font: inherit;
+  }
+  .mobileSwitch button[aria-pressed='true'] { background: var(--tv-selected); color: var(--tv-on-selected); font-weight: 600; }
+  .mainContainer, .rightSideContainer { width: 100%; height: 100%; flex: 1 1 auto; }
+  .rightSideContainer { border-left: 0; }
+  .columns:not(.showTools) .rightSideContainer { display: none; }
+  .columns.showTools .mainContainer { display: none; }
 }

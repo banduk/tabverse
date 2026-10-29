@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Packaged MV3 Chrome-native UI smoke tests with synthetic tabs and a throwaway vault.
 
-The Side Panel page itself is tested with its real extension URL. Browser-frame
-toolbar clicks cannot be driven through Playwright's page API, so the native
-sidePanel API is separately checked by a user-gesture initiated open() call.
+The Side Panel page is tested with its real extension URL. Browser-frame
+toolbar clicks cannot be driven through Playwright's page API: the native
+sidePanel registration and toolbar-open setting are checked via Chrome APIs,
+but actual browser chrome/panel docking is explicitly not verified here.
 """
 import json
 import os

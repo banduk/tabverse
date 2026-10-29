@@ -161,7 +161,7 @@ def run():
                 check("saved spaces are refreshed when opening their view")
                 check("saved spaces view renders without error",
                       side.get_by_role("alert").count() == 0)
-                side.get_by_role("button", name="Abas").click()
+                side.locator(".tv-side-tabs > button").first.click()
                 side.set_viewport_size({"width": 410, "height": 800})
                 check("side panel fits its real narrow width without horizontal overflow",
                     side.evaluate("document.documentElement.scrollWidth <= innerWidth"))

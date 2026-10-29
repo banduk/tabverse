@@ -241,9 +241,14 @@ export function SidePanelView() {
     <main className="tv-side-shell">
       <header className="tv-side-header">
         <div className="tv-side-brand">
-          <span className="tv-side-brand-icon" aria-hidden="true">
-            ▦
-          </span>
+          <img
+            className="tv-side-brand-icon"
+            src="icons/icon48.png"
+            alt=""
+            aria-hidden="true"
+            width="27"
+            height="27"
+          />
           <strong>Tabverse</strong>
         </div>
         <button

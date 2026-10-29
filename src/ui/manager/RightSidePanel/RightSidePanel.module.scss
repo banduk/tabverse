@@ -97,3 +97,11 @@
 .header { border-bottom-color: var(--tv-border); }
 .title { color: var(--tv-text); }
 
+
+/* Auxiliary drawer follows both system themes and never forces white. */
+.rail { background: var(--tv-alt); }
+.railButton { background: var(--tv-alt); border-color: var(--tv-border); color: var(--tv-muted); }
+.railButton:hover { background: var(--tv-hover); }
+.drawer { background: var(--tv-surface); border-left: 1px solid var(--tv-border); box-shadow: none; }
+.header { border-color: var(--tv-border); }
+.title { color: var(--tv-text); }

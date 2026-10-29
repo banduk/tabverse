@@ -1,17 +1,11 @@
+/* The Side Panel uses the same tokens as the full manager. */
 :root {
-  color-scheme: light dark;
-  font-family: Arial, Helvetica, system-ui, sans-serif;
-  --tv-bg: #fff;
-  --tv-surface: #fff;
-  --tv-surface-subtle: #f8fafd;
-  --tv-field: #f1f3f7;
-  --tv-text: #202124;
-  --tv-muted: #5f6368;
-  --tv-line: #e8eaed;
-  --tv-hover: #f1f3f4;
-  --tv-select: #e8f0fe;
-  --tv-blue: #0b57d0;
+  --tv-surface-subtle: var(--tv-alt);
+  --tv-line: var(--tv-border);
+  --tv-select: var(--tv-selected);
+  --tv-blue: var(--tv-accent);
 }
+
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; min-width: 260px; height: 100%; background: var(--tv-bg); color: var(--tv-text); }
 button, input { font: inherit; }
@@ -20,7 +14,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--tv-blue); o
 .tv-side-shell { height: 100vh; min-height: 300px; display: flex; flex-direction: column; font-size: 13px; }
 .tv-side-header { height: 56px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--tv-line); }
 .tv-side-brand { display: flex; gap: 10px; align-items: center; font-size: 15px; }
-.tv-side-brand-icon { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 6px; background: var(--tv-blue); color: #fff; font-size: 20px; }
+.tv-side-brand-icon { display: block; flex: 0 0 auto; width: 27px; height: 27px; border-radius: 6px; }
 .tv-side-icon-button { background: transparent; border: 0; border-radius: 50%; padding: 8px; width: 34px; height: 34px; color: var(--tv-muted); }
 .tv-side-icon-button:hover { background: var(--tv-hover); }
 .tv-side-icon-button svg, .tv-side-search svg { width: 18px; height: 18px; }
@@ -50,24 +44,20 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--tv-blue); o
 .tv-side-row { width: 100%; display: flex; align-items: center; min-height: 48px; gap: 11px; text-align: left; padding: 7px 11px; border: 0; border-radius: 7px; color: var(--tv-text); background: transparent; }
 .tv-side-row:hover { background: var(--tv-hover); }
 .tv-side-row.active { background: var(--tv-select); }
-.tv-side-favicon { flex-shrink: 0; width: 23px; height: 23px; border-radius: 5px; background: #e8f0fe; color: #185abc; display: grid; place-items: center; font-weight: 600; font-size: 12px; }
-.tv-side-folder { background: #e9eef5; color: #536985; font-size: 17px; }
+.tv-side-favicon { flex-shrink: 0; width: 23px; height: 23px; border-radius: 5px; background: var(--tv-selected); color: var(--tv-on-selected); display: grid; place-items: center; font-weight: 600; font-size: 12px; }
+.tv-side-folder { background: var(--tv-field); color: var(--tv-text); font-size: 17px; }
 .tv-side-row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .tv-side-row-text strong, .tv-side-row-text small { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; display: block; }
 .tv-side-row-text strong { font-size: 12px; font-weight: 500; }
 .tv-side-row-text small { color: var(--tv-muted); font-size: 10px; }
 .tv-side-pinned, .tv-side-arrow { color: var(--tv-muted); }
 .tv-side-empty { text-align: center; color: var(--tv-muted); padding: 40px 10px; }
-.tv-side-error { color: #b3261e; margin: 10px; overflow-wrap: anywhere; }
+.tv-side-error { color: var(--tv-danger); margin: 10px; overflow-wrap: anywhere; }
 .tv-side-footer { border-top: 1px solid var(--tv-line); padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 12px; background: var(--tv-surface-subtle); }
 .tv-side-privacy { color: var(--tv-muted); font-size: 11px; display: flex; gap: 8px; align-items: center; }
 .tv-side-status-dot { background: #188038; width: 7px; height: 7px; border-radius: 50%; }
-.tv-side-primary { border: 0; color: #fff; background: var(--tv-blue); border-radius: 18px; min-height: 36px; font-weight: 600; }
+.tv-side-primary { border: 0; color: var(--tv-accent-text); background: var(--tv-accent); border-radius: 18px; min-height: 36px; font-weight: 600; }
 .tv-side-primary:hover { filter: brightness(.94); }
 .tv-side-locked { padding: 22px; }
 .tv-side-locked h1 { font-size: 18px; }
-@media (prefers-color-scheme: dark) {
-  :root { --tv-bg: #292d35; --tv-surface: #292d35; --tv-surface-subtle: #262a32; --tv-field: #3a404a; --tv-text: #e8eaed; --tv-muted: #abb4c0; --tv-line: #444a55; --tv-hover: #3c4654; --tv-select: #29466b; --tv-blue: #8ab4f8; }
-  .tv-side-brand-icon, .tv-side-primary { background: #8ab4f8; color: #152b45; }
-}
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }

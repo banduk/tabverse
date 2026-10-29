@@ -41,8 +41,9 @@
   min-width: 0;
   padding: 4px 9px;
   border-radius: 6px;
-  background-color: global.$color-light-accent;
-  color: #fff;
+  background-color: var(--tv-field);
+  color: var(--tv-text);
+  border-left: 3px solid var(--tv-muted);
   line-height: 1.5;
 }
 
